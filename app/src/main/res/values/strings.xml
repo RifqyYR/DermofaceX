@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">DermofaceX</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="app_version">v1.0</string>
+    <string name="greeting">Halo, selamat datang</string>
+    <string name="greeting_2">Bagaimana kabar Anda hari ini?</string>
+    <string name="check_your_face_skin">Cek Kulit\nWajah Anda</string>
+    <string name="facial_skin_disorder_information">Informasi Gangguan Kulit Wajah</string>
+    <string name="acne">Jerawat</string>
+    <string name="hyperpigmentation">Hiperpigmentasi</string>
+    <string name="redness">Kemerahan</string>
+    <string name="oily">Berminyak</string>
+    <string name="normal">Normal</string>
+    <string name="blackheads">Komedo</string>
+    <string name="application_information">Informasi Aplikasi</string>
+    <string name="how_to_use">Cara Penggunaan</string>
+    <string name="about_application">Tentang Aplikasi</string>
+</resources>
