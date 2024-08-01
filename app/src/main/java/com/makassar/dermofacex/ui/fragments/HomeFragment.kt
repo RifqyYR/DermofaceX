@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.makassar.dermofacex.R
 import com.makassar.dermofacex.databinding.FragmentHomeBinding
 
@@ -24,6 +25,13 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupUI()
+        setupButton()
+    }
+
+    private fun setupButton() {
+        binding.btnApplicationInformation.btn.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_aboutAppFragment)
+        }
     }
 
     private fun setupUI() {

@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:background="@color/background"
     android:orientation="vertical"
-    android:padding="16dp"
+    android:paddingHorizontal="16dp"
+    android:paddingVertical="32dp"
     tools:context=".ui.fragments.HomeFragment">
 
     <TextView

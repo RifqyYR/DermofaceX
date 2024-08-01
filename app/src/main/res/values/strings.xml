@@ -16,4 +16,5 @@
     <string name="application_information">Informasi Aplikasi</string>
     <string name="how_to_use">Cara Penggunaan</string>
     <string name="about_application">Tentang Aplikasi</string>
+    <string name="about_app_description">DermofaceX adalah sebuah aplikasi berbasis Android untuk melakukan klasifikasi gangguan kulit wajah. Saat ini DermofaceX hanya bisa melakukan klasifikasi pada 5 jenis gangguan kulit wajah yaitu jerawat, hiperpigmentasi, kemerahan, komedo, kulit berminyak, dan juga kulit normal.</string>
 </resources>
