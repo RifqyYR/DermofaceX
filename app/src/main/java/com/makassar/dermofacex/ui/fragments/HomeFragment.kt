@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.makassar.dermofacex.R
@@ -29,6 +30,20 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupButton() {
+        binding.cardAcne.card.setOnClickListener {
+            val bundle = bundleOf(
+                "facialSkinDisorder" to getString(R.string.acne),
+                "definition" to R.string.acne_definition,
+                "cause" to R.string.acne_cause,
+                "treatment" to R.string.acne_treatment,
+                "prevention" to R.string.acne_prevention,
+            )
+            findNavController().navigate(
+                R.id.action_homeFragment_to_detailFacialSkinDisorderFragment,
+                bundle
+            )
+        }
+
         binding.btnApplicationInformation.btn.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_aboutAppFragment)
         }

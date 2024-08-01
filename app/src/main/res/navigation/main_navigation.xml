@@ -28,6 +28,9 @@
         <action
             android:id="@+id/action_homeFragment_to_howToUseFragment"
             app:destination="@id/howToUseFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_detailFacialSkinDisorderFragment"
+            app:destination="@id/detailFacialSkinDisorderFragment" />
     </fragment>
     <fragment
         android:id="@+id/aboutAppFragment"
@@ -39,4 +42,25 @@
         android:name="com.makassar.dermofacex.ui.fragments.HowToUseFragment"
         android:label="fragment_how_to_use"
         tools:layout="@layout/fragment_how_to_use" />
+    <fragment
+        android:id="@+id/detailFacialSkinDisorderFragment"
+        android:name="com.makassar.dermofacex.ui.fragments.DetailFacialSkinDisorderFragment"
+        android:label="fragment_detail_facial_skin_disorder"
+        tools:layout="@layout/fragment_detail_facial_skin_disorder" >
+        <argument
+            android:name="facial_skin_disorder"
+            app:argType="string" />
+        <argument
+            android:name="definition"
+            app:argType="integer" />
+        <argument
+            android:name="cause"
+            app:argType="integer" />
+        <argument
+            android:name="treatment"
+            app:argType="integer" />
+        <argument
+            android:name="prevention"
+            app:argType="integer" />
+    </fragment>
 </navigation>
