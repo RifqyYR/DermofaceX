@@ -32,6 +32,9 @@ class HomeFragment : Fragment() {
         binding.btnApplicationInformation.btn.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_aboutAppFragment)
         }
+        binding.btnHowToUse.btn.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_howToUseFragment)
+        }
     }
 
     private fun setupUI() {
