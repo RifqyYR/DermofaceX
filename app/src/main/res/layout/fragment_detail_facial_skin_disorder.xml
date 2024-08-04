@@ -75,7 +75,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:justificationMode="inter_word"
-                    tools:text="@string/acne_definition" />
+                    tools:text="@string/normal_definition" />
 
                 <LinearLayout
                     android:id="@+id/dropdown_cause"
@@ -106,7 +106,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:visibility="gone"
-                    tools:text="@string/acne_cause" />
+                    tools:text="@string/normal_cause" />
 
                 <LinearLayout
                     android:id="@+id/dropdown_treatment"
@@ -137,7 +137,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:visibility="gone"
-                    tools:text="@string/acne_treatment" />
+                    tools:text="@string/oily_treatment" />
 
                 <LinearLayout
                     android:id="@+id/dropdown_prevention"
@@ -168,7 +168,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:visibility="gone"
-                    tools:text="@string/acne_prevention" />
+                    tools:text="@string/oily_prevention" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 

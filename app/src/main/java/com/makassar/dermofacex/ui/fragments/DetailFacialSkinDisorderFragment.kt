@@ -25,31 +25,41 @@ class DetailFacialSkinDisorderFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val image = arguments?.getInt("image")
         val facialSkinDisorder = arguments?.getString("facialSkinDisorder")
         val definition = arguments?.getInt("definition")
         val cause = arguments?.getInt("cause")
         val treatment = arguments?.getInt("treatment")
         val prevention = arguments?.getInt("prevention")
 
-        if (facialSkinDisorder != null && definition != null && cause != null && treatment != null && prevention != null) {
-            setupUI(facialSkinDisorder, definition, cause, treatment, prevention)
-        }
+        setupUI(image, facialSkinDisorder, definition, cause, treatment, prevention)
 
         setupButton()
     }
 
     private fun setupUI(
-        facialSkinDisorder: String,
-        definition: Int,
-        cause: Int,
-        treatment: Int,
-        prevention: Int
+        image: Int?,
+        facialSkinDisorder: String?,
+        definition: Int?,
+        cause: Int?,
+        treatment: Int?,
+        prevention: Int?
     ) {
+        if (facialSkinDisorder == "Normal") {
+            binding.dropdownTreatment.visibility = View.GONE
+            binding.tvDefinition.visibility = View.VISIBLE
+            binding.dropdownPrevention.visibility = View.GONE
+            binding.ivFacialSkinDisorder.setImageResource(image!!)
+            binding.tvFacialSkinDisorderTitle.text = facialSkinDisorder
+            binding.tvDefinition.text = getString(definition!!)
+            binding.tvCause.text = getString(cause!!)
+        }
+        binding.ivFacialSkinDisorder.setImageResource(image!!)
         binding.tvFacialSkinDisorderTitle.text = facialSkinDisorder
-        binding.tvDefinition.text = getString(definition)
-        binding.tvCause.text = getString(cause)
-        binding.tvTreatment.text = getString(treatment)
-        binding.tvPrevention.text = getString(prevention)
+        binding.tvDefinition.text = getString(definition!!)
+        binding.tvCause.text = getString(cause!!)
+        binding.tvTreatment.text = getString(treatment!!)
+        binding.tvPrevention.text = getString(prevention!!)
     }
 
     private fun setupButton() {

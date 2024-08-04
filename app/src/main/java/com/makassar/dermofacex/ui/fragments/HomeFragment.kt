@@ -30,8 +30,79 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupButton() {
+        binding.cardNormal.card.setOnClickListener {
+            val bundle = bundleOf(
+                "image" to R.drawable.normal,
+                "facialSkinDisorder" to getString(R.string.normal),
+                "definition" to R.string.normal_definition,
+                "cause" to R.string.normal_cause,
+                "treatment" to R.string.normal,
+                "prevention" to R.string.normal,
+            )
+            findNavController().navigate(
+                R.id.action_homeFragment_to_detailFacialSkinDisorderFragment,
+                bundle
+            )
+        }
+        binding.cardOily.card.setOnClickListener {
+            val bundle = bundleOf(
+                "image" to R.drawable.oily,
+                "facialSkinDisorder" to getString(R.string.oily),
+                "definition" to R.string.oily_definition,
+                "cause" to R.string.oily_cause,
+                "treatment" to R.string.oily_treatment,
+                "prevention" to R.string.oily_prevention,
+            )
+            findNavController().navigate(
+                R.id.action_homeFragment_to_detailFacialSkinDisorderFragment,
+                bundle
+            )
+        }
+        binding.cardBlackheads.card.setOnClickListener {
+            val bundle = bundleOf(
+                "image" to R.drawable.komedo,
+                "facialSkinDisorder" to getString(R.string.blackheads),
+                "definition" to R.string.blackheads_definition,
+                "cause" to R.string.blackheads_cause,
+                "treatment" to R.string.blackheads_treatment,
+                "prevention" to R.string.blackheads_prevention,
+            )
+            findNavController().navigate(
+                R.id.action_homeFragment_to_detailFacialSkinDisorderFragment,
+                bundle
+            )
+        }
+        binding.cardRedness.card.setOnClickListener {
+            val bundle = bundleOf(
+                "image" to R.drawable.kemerahan,
+                "facialSkinDisorder" to getString(R.string.redness),
+                "definition" to R.string.redness_definition,
+                "cause" to R.string.redness_cause,
+                "treatment" to R.string.redness_treatment,
+                "prevention" to R.string.redness_prevention,
+            )
+            findNavController().navigate(
+                R.id.action_homeFragment_to_detailFacialSkinDisorderFragment,
+                bundle
+            )
+        }
+        binding.cardHyperpigmentation.card.setOnClickListener {
+            val bundle = bundleOf(
+                "image" to R.drawable.hyperpigmentation,
+                "facialSkinDisorder" to getString(R.string.hyperpigmentation),
+                "definition" to R.string.hyperpigmentation_definition,
+                "cause" to R.string.hyperpigmentation_cause,
+                "treatment" to R.string.hyperpigmentation_treatment,
+                "prevention" to R.string.hyperpigmentation_prevention,
+            )
+            findNavController().navigate(
+                R.id.action_homeFragment_to_detailFacialSkinDisorderFragment,
+                bundle
+            )
+        }
         binding.cardAcne.card.setOnClickListener {
             val bundle = bundleOf(
+                "image" to R.drawable.acne,
                 "facialSkinDisorder" to getString(R.string.acne),
                 "definition" to R.string.acne_definition,
                 "cause" to R.string.acne_cause,
