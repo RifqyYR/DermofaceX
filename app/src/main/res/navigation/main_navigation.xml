@@ -31,6 +31,12 @@
         <action
             android:id="@+id/action_homeFragment_to_detailFacialSkinDisorderFragment"
             app:destination="@id/detailFacialSkinDisorderFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_scanFaceFragment"
+            app:destination="@id/scanFaceFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_videoScanFragment"
+            app:destination="@id/videoScanFragment" />
     </fragment>
     <fragment
         android:id="@+id/aboutAppFragment"
@@ -66,4 +72,23 @@
             android:name="image"
             app:argType="integer" />
     </fragment>
+    <fragment
+        android:id="@+id/scanFaceFragment"
+        android:name="com.makassar.dermofacex.ui.fragments.ScanFaceFragment"
+        android:label="fragment_scan_face"
+        tools:layout="@layout/fragment_scan_face" >
+        <action
+            android:id="@+id/action_scanFaceFragment_to_cameraFragment"
+            app:destination="@id/cameraFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/cameraFragment"
+        android:name="com.makassar.dermofacex.ui.fragments.CameraFragment"
+        android:label="fragment_camera"
+        tools:layout="@layout/fragment_camera" />
+    <fragment
+        android:id="@+id/videoScanFragment"
+        android:name="com.makassar.dermofacex.ui.fragments.VideoScanFragment"
+        android:label="fragment_video_scan"
+        tools:layout="@layout/fragment_video_scan" />
 </navigation>

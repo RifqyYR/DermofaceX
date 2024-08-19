@@ -44,4 +44,10 @@
     <string name="oily_prevention">Kondisi kulit ini tidak sepenuhnya bisa dicegah, terutama jika penyebabnya genetik atau hormon. Meski begitu, Anda bisa berupaya mengurangi produksi minyak berlebih dengan cara berikut.\n* Jangan terlalu sering mencuci muka. Jika kulit wajah kekurangan pelumas alaminya, ini justru dapat memicu produksi minyak yang lebih banyak.\n* Mencuci muka dengan air hangat. Air yang terlalu panas atau dingin bisa membuat kulit wajah kering sehingga produksi minyak justru bertambah banyak.\n* Menghindari pelembap bertekstur berat. Pilihlah pelembap bertekstur encer yang tidak meninggalkan kesan lengket atau menutup pori-pori.\n* Usahakan untuk menghindari pemakaian makeup yang terlalu tebal agar wajah tak semakin terlihat basah dan menyumbat pori-pori.\n* Rutin memakai masker wajah. Masker clay atau tanah liat bisa menjadi pilihan yang tepat.</string>
     <string name="normal_definition">Kulit wajah normal adalah tipe kulit yang seimbang, tidak terlalu kering dan tidak terlalu berminyak.</string>
     <string name="normal_cause">* Genetika: Faktor genetik memainkan peran besar dalam menentukan tipe kulit.\n* Gaya Hidup Sehat: Pola makan yang seimbang, cukup tidur, dan hidrasi yang baik mendukung keseimbangan kulit.\n* Perawatan Kulit yang Tepat: Penggunaan produk yang sesuai dengan jenis kulit dan rutinitas perawatan kulit yang konsisten membantu menjaga keseimbangan kulit.</string>
+    <string name="cek_kulit_wajah">Cek Kulit Wajah</string>
+    <string name="deskripsi_cek_kulit_wajah">Silahkan ambil gambar wajah Anda dari 3 sisi, yaitu tampak depan, kiri, dan kanan dengan jarak maksimal 30 cm</string>
+    <string name="tampak_depan">Tampak Depan</string>
+    <string name="tampak_kiri">Tampak Kiri</string>
+    <string name="tampak_kanan">Tampak Kanan</string>
+    <string name="cek_sekarang">Cek Sekarang</string>
 </resources>

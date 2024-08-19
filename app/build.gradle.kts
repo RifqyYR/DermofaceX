@@ -50,6 +50,17 @@ dependencies {
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.navigation.ui.ktx)
     implementation(libs.androidx.fragment.ktx)
+    implementation(libs.androidx.camera.core)
+
+    implementation(libs.face.detection)
+    implementation(libs.play.services.mlkit.face.detection)
+
+    // Camera X
+    implementation(libs.androidx.camera.core.v110alpha05)
+    implementation(libs.androidx.camera.camera2)
+    implementation(libs.androidx.camera.lifecycle)
+    implementation(libs.androidx.camera.view)
+    implementation(libs.firebase.crashlytics.buildtools)
 
     // Testing
     testImplementation(libs.junit)

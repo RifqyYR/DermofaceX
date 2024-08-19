@@ -30,6 +30,10 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupButton() {
+        binding.cardCheckYourFaceSkin.setOnClickListener {
+            // findNavController().navigate(R.id.action_homeFragment_to_scanFaceFragment)
+            findNavController().navigate(R.id.action_homeFragment_to_videoScanFragment)
+        }
         binding.cardNormal.card.setOnClickListener {
             val bundle = bundleOf(
                 "image" to R.drawable.normal,
@@ -124,7 +128,6 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupUI() {
-        // Facial Skin Disorder Information UI
         binding.cardAcne.apply {
             tvCard.text = getString(R.string.acne)
             ivCard.setImageDrawable(
