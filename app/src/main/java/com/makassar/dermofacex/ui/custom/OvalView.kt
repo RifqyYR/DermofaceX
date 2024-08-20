@@ -36,9 +36,9 @@ class OvalView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         val centerX = width / 2
-        val centerY = height / 2.8
-        val radiusX = width / 2.5
-        val radiusY = height / 3.8
+        val centerY = height / 2.5
+        val radiusX = width / 2.1
+        val radiusY = height / 2.8
 
         ovalRect.set(
             (centerX - radiusX).toFloat(),

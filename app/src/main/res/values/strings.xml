@@ -50,4 +50,6 @@
     <string name="tampak_kiri">Tampak Kiri</string>
     <string name="tampak_kanan">Tampak Kanan</string>
     <string name="cek_sekarang">Cek Sekarang</string>
+    <string name="face_detected">Wajah terdeteksi</string>
+    <string name="position_your_face_in_the_oval">Posisikan wajah Anda pada oval</string>
 </resources>

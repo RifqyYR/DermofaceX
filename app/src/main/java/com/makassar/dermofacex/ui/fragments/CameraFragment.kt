@@ -29,6 +29,7 @@ import com.makassar.dermofacex.utils.FaceDetectionProcessor
 import java.io.File
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
+import kotlin.math.abs
 import kotlin.math.sqrt
 
 class CameraFragment : Fragment() {
@@ -99,7 +100,7 @@ class CameraFragment : Fragment() {
                                 )
 
                                 // Check if the center of the face's bounding box is within the oval
-                                if (distanceFromCenter in 0.74F..0.79F && (Math.abs(headEulerAngleY) < 30 && Math.abs(
+                                if (distanceFromCenter in 0.58F..0.62F && (abs(headEulerAngleY) < 2.5 && abs(
                                         headEulerAngleZ
                                     ) < 30)
                                 ) {
@@ -107,21 +108,22 @@ class CameraFragment : Fragment() {
                                     val trackingId = face.trackingId ?: return@process
                                     faceTracker[trackingId] =
                                         faceTracker.getOrDefault(trackingId, 0) + 1
-                                    Log.d(TAG, "startCamera: $faceTracker")
 
                                     // If the face has been detected in 3 consecutive frames, consider it a real face
                                     if (faceTracker[trackingId]!! >= 3) {
-                                        takePhoto()
-                                        binding.tvStatus.text = "Face Detected"
+                                        // takePhoto()
+                                        binding.tvStatus.text = getString(R.string.face_detected)
                                     }
                                 } else {
-                                    binding.tvStatus.text = "Position your face in the oval"
+                                    binding.tvStatus.text =
+                                        getString(R.string.position_your_face_in_the_oval)
                                 }
                             }
 
                             imageProxy.close()
                         }, { e ->
-                            binding.tvStatus.text = "Position your face in the oval"
+                            binding.tvStatus.text =
+                                getString(R.string.position_your_face_in_the_oval)
                             Log.e(TAG, "Face detection failed", e)
                             imageProxy.close()
                         })
@@ -152,7 +154,7 @@ class CameraFragment : Fragment() {
 
                 // Bind use cases to camera
                 cameraProvider.bindToLifecycle(
-                    this,
+                    viewLifecycleOwner,
                     cameraSelector,
                     preview,
                     imageCapture,
@@ -210,13 +212,9 @@ class CameraFragment : Fragment() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == REQUEST_CODE_PERMISSIONS) {
-            // If all permissions granted , then start Camera
             if (allPermissionsGranted()) {
                 startCamera()
             } else {
-                // If permissions are not granted,
-                // present a toast to notify the user that
-                // the permissions were not granted.
                 Toast.makeText(
                     requireContext(),
                     "Permissions not granted by the user.",
@@ -237,7 +235,15 @@ class CameraFragment : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        _binding = null
         cameraExecutor.shutdown()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        val cameraProvider = ProcessCameraProvider.getInstance(requireContext()).get()
+        cameraProvider.unbindAll()
+        cameraExecutor.shutdown()
+        _binding = null
+        imageCapture = null
     }
 }

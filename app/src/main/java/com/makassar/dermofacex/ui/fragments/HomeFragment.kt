@@ -32,7 +32,8 @@ class HomeFragment : Fragment() {
     private fun setupButton() {
         binding.cardCheckYourFaceSkin.setOnClickListener {
             // findNavController().navigate(R.id.action_homeFragment_to_scanFaceFragment)
-            findNavController().navigate(R.id.action_homeFragment_to_videoScanFragment)
+            // findNavController().navigate(R.id.action_homeFragment_to_videoScanFragment)
+            findNavController().navigate(R.id.action_homeFragment_to_cameraFragment)
         }
         binding.cardNormal.card.setOnClickListener {
             val bundle = bundleOf(
