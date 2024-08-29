@@ -38,6 +38,17 @@
     </FrameLayout>
 
     <TextView
+        android:id="@+id/tv_classification_result"
+        style="@style/PrimaryMedium14Text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        app:layout_constraintBottom_toTopOf="@+id/tv_status"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="classification_result" />
+
+    <TextView
         android:id="@+id/tv_status"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

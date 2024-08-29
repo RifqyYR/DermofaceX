@@ -3,7 +3,11 @@ package com.makassar.dermofacex.ui.fragments
 import android.Manifest
 import android.content.pm.PackageManager
 import android.graphics.PointF
+import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -21,12 +25,24 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.mlkit.vision.common.InputImage
 import com.makassar.dermofacex.R
+import com.makassar.dermofacex.data.Resource
 import com.makassar.dermofacex.databinding.FragmentCameraBinding
+import com.makassar.dermofacex.di.viewModelModule
+import com.makassar.dermofacex.ui.viewModel.MainViewModel
 import com.makassar.dermofacex.utils.FaceDetectionProcessor
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.context.loadKoinModules
 import java.io.File
+import java.io.IOException
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import kotlin.math.abs
@@ -36,11 +52,14 @@ class CameraFragment : Fragment() {
     private var _binding: FragmentCameraBinding? = null
     private val binding get() = _binding!!
 
+    private val viewModel: MainViewModel by viewModel()
     private var imageCapture: ImageCapture? = null
     private lateinit var outputDirectory: File
     private lateinit var cameraExecutor: ExecutorService
     private val faceDetectionProcessor = FaceDetectionProcessor()
     val faceTracker = mutableMapOf<Int, Int>()
+    private val handler = Handler(Looper.getMainLooper())
+    private val delayMillis = 5000L // 5 seconds
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,6 +72,7 @@ class CameraFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        loadKoinModules(viewModelModule)
         cameraExecutor = Executors.newSingleThreadExecutor()
 
         if (allPermissionsGranted()) {
@@ -65,7 +85,16 @@ class CameraFragment : Fragment() {
             )
         }
 
+        getClassificationResult()
+
         outputDirectory = getOutputDirectory()
+    }
+
+    private val takePhotoRunnable = object : Runnable {
+        override fun run() {
+            takePhoto()
+            binding.tvStatus.text = getString(R.string.face_detected)
+        }
     }
 
     @OptIn(ExperimentalGetImage::class)
@@ -111,8 +140,11 @@ class CameraFragment : Fragment() {
 
                                     // If the face has been detected in 3 consecutive frames, consider it a real face
                                     if (faceTracker[trackingId]!! >= 3) {
-                                        // takePhoto()
-                                        binding.tvStatus.text = getString(R.string.face_detected)
+                                        // Remove any previous callbacks to prevent multiple executions
+                                        handler.removeCallbacks(takePhotoRunnable)
+
+                                        // Post the Runnable to be executed after the delay
+                                        handler.postDelayed(takePhotoRunnable, delayMillis)
                                     }
                                 } else {
                                     binding.tvStatus.text =
@@ -145,7 +177,7 @@ class CameraFragment : Fragment() {
 
             imageCapture = ImageCapture.Builder().build()
 
-            // Select back camera as a default
+            // Select front camera as a default
             val cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
 
             try {
@@ -171,26 +203,64 @@ class CameraFragment : Fragment() {
     private fun takePhoto() {
         val imageCapture = imageCapture ?: return
 
-        // Create time-stamped output file to hold the image
-        val photoFile = File(
-            outputDirectory,
-            "${System.currentTimeMillis()}.jpg"
-        )
+        val photoFile = File(outputDirectory, "${System.currentTimeMillis()}.jpg")
+        val outputOptions = ImageCapture.OutputFileOptions.Builder(photoFile).build()
 
-        // Setup image capture listener which is triggered after photo has been taken
         imageCapture.takePicture(
-            ImageCapture.OutputFileOptions.Builder(photoFile).build(),
+            outputOptions,
             ContextCompat.getMainExecutor(requireContext()),
             object : ImageCapture.OnImageSavedCallback {
-                override fun onError(exc: ImageCaptureException) {
-                    Log.e(TAG, "Photo capture failed: ${exc.message}", exc)
+                override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
+                    val savedUri = photoFile.toUri()
+                    sendImageToAPI(savedUri)
                 }
 
-                override fun onImageSaved(output: ImageCapture.OutputFileResults) {
-                    val savedUri = output.savedUri ?: photoFile.toUri()
-                    Log.d(TAG, "Photo capture succeeded: $savedUri")
+                override fun onError(exception: ImageCaptureException) {
+                    Log.e("CameraFragment", "Photo capture failed: ${exception.message}", exception)
                 }
             })
+    }
+
+    private fun sendImageToAPI(image: Uri) {
+        val fileBytes = readFileFromUri(image) ?: return
+        val file = File(requireContext().cacheDir, "uploaded_image.jpg").apply {
+            writeBytes(fileBytes)
+        }
+        val requestFile = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
+        val body = MultipartBody.Part.createFormData("image", file.name, requestFile)
+        viewModel.getClassifyResult(body)
+    }
+
+    private fun readFileFromUri(uri: Uri): ByteArray? {
+        val contentResolver = requireContext().contentResolver
+        return try {
+            contentResolver.openInputStream(uri)?.use { inputStream ->
+                inputStream.readBytes()
+            }
+        } catch (e: IOException) {
+            Log.e("CameraFragment", "Failed to read file from URI: ${e.message}", e)
+            null
+        }
+    }
+
+    private fun getClassificationResult() {
+        lifecycleScope.launch {
+            viewModel.classify.collectLatest { result ->
+                when (result) {
+                    is Resource.Empty -> binding.tvClassificationResult.text = "Tidak Ditemukan"
+                    is Resource.Error -> {
+                        Toast.makeText(
+                            requireContext(),
+                            "Terjadi Kesalahan",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+
+                    is Resource.Loading -> binding.tvClassificationResult.text = "Memproses citra"
+                    is Resource.Success -> binding.tvClassificationResult.text = result.data?.result
+                }
+            }
+        }
     }
 
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
@@ -198,11 +268,10 @@ class CameraFragment : Fragment() {
     }
 
     private fun getOutputDirectory(): File {
-        val mediaDir = requireContext().externalMediaDirs.firstOrNull()?.let {
+        val mediaDir = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        return mediaDir?.let {
             File(it, resources.getString(R.string.app_name)).apply { mkdirs() }
-        }
-        return if (mediaDir != null && mediaDir.exists())
-            mediaDir else requireContext().filesDir
+        } ?: File(requireContext().filesDir, resources.getString(R.string.app_name))
     }
 
     // checks the camera permission
@@ -228,7 +297,6 @@ class CameraFragment : Fragment() {
 
     companion object {
         private const val TAG = "CameraXGFG"
-        private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
         private const val REQUEST_CODE_PERMISSIONS = 20
         private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
     }

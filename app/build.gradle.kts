@@ -1,6 +1,9 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    id("kotlin-kapt")
+    id("kotlin-android")
+    id("kotlin-parcelize")
 }
 
 android {
@@ -18,6 +21,11 @@ android {
     }
 
     buildTypes {
+        debug {
+            buildConfigField("String", "API_URL", "\"https://6066-103-195-142-125.ngrok-free.app/\"")
+            buildConfigField("boolean", "CATALYST_DEBUG", "true")
+            buildConfigField("boolean", "ALLOW_INVALID_CERTIFICATE", "true")
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(
@@ -35,6 +43,7 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
 }
 
@@ -52,8 +61,40 @@ dependencies {
     implementation(libs.androidx.fragment.ktx)
     implementation(libs.androidx.camera.core)
 
+    // Face Detection
     implementation(libs.face.detection)
     implementation(libs.play.services.mlkit.face.detection)
+
+    // Retrofit
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    api(libs.retrofit2.kotlin.coroutines.adapter)
+    implementation(libs.retrofit2.converter.scalars)
+
+    // OkHTTP3
+    implementation(libs.okhttp)
+    implementation(libs.logging.interceptor)
+
+    // Coroutine
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.android)
+
+    // Livedata
+    api(libs.androidx.lifecycle.livedata.ktx)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
+
+    // view model
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+
+    //library glide
+    implementation(libs.glide)
+    annotationProcessor(libs.compiler)
+
+    //koin
+    implementation(libs.koin.android)
+    implementation(libs.koin.core)
+    implementation(libs.koin.core.coroutines)
+
 
     // Camera X
     implementation(libs.androidx.camera.core.v110alpha05)
