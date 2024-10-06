@@ -57,20 +57,8 @@
         android:label="fragment_detail_facial_skin_disorder"
         tools:layout="@layout/fragment_detail_facial_skin_disorder" >
         <argument
-            android:name="facial_skin_disorder"
-            app:argType="string" />
-        <argument
-            android:name="definition"
-            app:argType="integer" />
-        <argument
-            android:name="cause"
-            app:argType="integer" />
-        <argument
-            android:name="treatment"
-            app:argType="integer" />
-        <argument
-            android:name="prevention"
-            app:argType="integer" />
+            android:name="disorderInformation"
+            app:argType="com.makassar.dermofacex.data.DisorderInformation" />
         <argument
             android:name="image"
             app:argType="integer" />

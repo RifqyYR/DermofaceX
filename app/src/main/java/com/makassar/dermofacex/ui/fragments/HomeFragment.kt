@@ -1,19 +1,31 @@
 package com.makassar.dermofacex.ui.fragments
 
+import android.app.AlertDialog
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.makassar.dermofacex.R
 import com.makassar.dermofacex.databinding.FragmentHomeBinding
+import com.makassar.dermofacex.ui.viewModel.MainViewModel
+import com.makassar.dermofacex.utils.disorderInformation
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
+
+    private val viewModel: MainViewModel by viewModel()
+    private lateinit var galleryLauncher: ActivityResultLauncher<Intent>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -27,92 +39,193 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupUI()
         setupButton()
+
+        setupGalleryLauncher()
+    }
+
+    private fun setupGalleryLauncher() {
+        // Initialize the ActivityResultLauncher
+        galleryLauncher = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { result ->
+            if (result.resultCode == AppCompatActivity.RESULT_OK) {
+                result.data?.data?.let { uri ->
+                    // Kirim gambar ke API dan navigasi ke fragment baru
+                    uploadImageAndShowResult(uri)
+                }
+            }
+        }
+    }
+
+    private fun showImageSourceDialog() {
+        val options = arrayOf(getString(R.string.camera), getString(R.string.gallery))
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle(getString(R.string.select_image_source))
+        builder.setItems(options) { _, which ->
+            when (which) {
+                0 -> {
+                    // Navigasi ke CameraFragment
+                    findNavController().navigate(R.id.action_homeFragment_to_cameraFragment)
+                }
+
+                1 -> {
+                    // Pilih gambar dari galeri
+                    pickImageFromGallery()
+                }
+            }
+        }
+        builder.show()
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        if (isLoading) {
+            binding.progressBar.visibility = View.VISIBLE
+            binding.loadingOverlay.visibility = View.VISIBLE
+        } else {
+            binding.progressBar.visibility = View.GONE
+            binding.loadingOverlay.visibility = View.GONE
+        }
+    }
+
+    private fun uploadImageAndShowResult(imageUri: Uri) {
+        // Convert URI ke file atau inputStream sesuai kebutuhan API
+//        val imageFile = getFileFromUri(requireContext(), imageUri)
+//
+//        val requestBody = imageFile.asRequestBody("image/*".toMediaTypeOrNull())
+//        val imagePart = MultipartBody.Part.createFormData("image", imageFile.name, requestBody)
+//        viewModel.getClassifyResult(imagePart)
+//        lifecycleScope.launch {
+//            viewModel.classify.collectLatest { result ->
+//                when (result) {
+//                    is Resource.Empty -> {
+//                        showLoading(false)
+//                    }
+//
+//                    is Resource.Error -> {
+//                        showLoading(false)
+//                        Toast.makeText(
+//                            requireContext(),
+//                            "Terjadi Kesalahan",
+//                            Toast.LENGTH_SHORT
+//                        ).show()
+//                    }
+//
+//                    is Resource.Loading -> showLoading(true)
+//                    is Resource.Success -> {
+//                        showLoading(false)
+//                        val bundle = Bundle()
+//                        val bottomSheetResult = BottomSheetResultFragment()
+//
+//                        bundle.putString(
+//                            BottomSheetResultFragment.DISORDER_NAME,
+//                            result.data?.result
+//                        )
+//                        bottomSheetResult.arguments = bundle
+//                        bottomSheetResult.show(
+//                            requireActivity().supportFragmentManager,
+//                            bottomSheetResult.tag
+//                        )
+//                    }
+//                }
+//            }
+//        }
+        val bundle = Bundle()
+        val bottomSheetResult = BottomSheetResultFragment()
+
+        bundle.putString(
+            BottomSheetResultFragment.DISORDER_NAME,
+            "Hiperpigmentasi"
+        )
+        bottomSheetResult.arguments = bundle
+        bottomSheetResult.show(
+            requireActivity().supportFragmentManager,
+            bottomSheetResult.tag
+        )
+    }
+
+    private fun pickImageFromGallery() {
+        val intent = Intent(Intent.ACTION_PICK)
+        intent.type = "image/*"
+        galleryLauncher.launch(intent)
     }
 
     private fun setupButton() {
+        val normalInfo = disorderInformation[5]
+        val oilyInfo = disorderInformation[4]
+        val blackheadsInfo = disorderInformation[3]
+        val rednessInfo = disorderInformation[2]
+        val hyperpigmentationInfo = disorderInformation[0]
+        val acneInfo = disorderInformation[1]
+
         binding.cardCheckYourFaceSkin.setOnClickListener {
-            // findNavController().navigate(R.id.action_homeFragment_to_scanFaceFragment)
-            // findNavController().navigate(R.id.action_homeFragment_to_videoScanFragment)
-            findNavController().navigate(R.id.action_homeFragment_to_cameraFragment)
+            showImageSourceDialog()
         }
+
+        // Navigasi untuk "Normal" card
         binding.cardNormal.card.setOnClickListener {
             val bundle = bundleOf(
-                "image" to R.drawable.normal,
-                "facialSkinDisorder" to getString(R.string.normal),
-                "definition" to R.string.normal_definition,
-                "cause" to R.string.normal_cause,
-                "treatment" to R.string.normal,
-                "prevention" to R.string.normal,
+                "disorderInformation" to normalInfo, // Mengirimkan objek DisorderInformation
+                "image" to R.drawable.normal // Gambar tetap dari drawable resource
             )
             findNavController().navigate(
                 R.id.action_homeFragment_to_detailFacialSkinDisorderFragment,
                 bundle
             )
         }
+
+        // Navigasi untuk "Oily" card
         binding.cardOily.card.setOnClickListener {
             val bundle = bundleOf(
-                "image" to R.drawable.oily,
-                "facialSkinDisorder" to getString(R.string.oily),
-                "definition" to R.string.oily_definition,
-                "cause" to R.string.oily_cause,
-                "treatment" to R.string.oily_treatment,
-                "prevention" to R.string.oily_prevention,
+                "disorderInformation" to oilyInfo,
+                "image" to R.drawable.oily
             )
             findNavController().navigate(
                 R.id.action_homeFragment_to_detailFacialSkinDisorderFragment,
                 bundle
             )
         }
+
+        // Navigasi untuk "Blackheads" card
         binding.cardBlackheads.card.setOnClickListener {
             val bundle = bundleOf(
-                "image" to R.drawable.komedo,
-                "facialSkinDisorder" to getString(R.string.blackheads),
-                "definition" to R.string.blackheads_definition,
-                "cause" to R.string.blackheads_cause,
-                "treatment" to R.string.blackheads_treatment,
-                "prevention" to R.string.blackheads_prevention,
+                "disorderInformation" to blackheadsInfo,
+                "image" to R.drawable.komedo
             )
             findNavController().navigate(
                 R.id.action_homeFragment_to_detailFacialSkinDisorderFragment,
                 bundle
             )
         }
+
+        // Navigasi untuk "Redness" card
         binding.cardRedness.card.setOnClickListener {
             val bundle = bundleOf(
-                "image" to R.drawable.kemerahan,
-                "facialSkinDisorder" to getString(R.string.redness),
-                "definition" to R.string.redness_definition,
-                "cause" to R.string.redness_cause,
-                "treatment" to R.string.redness_treatment,
-                "prevention" to R.string.redness_prevention,
+                "disorderInformation" to rednessInfo,
+                "image" to R.drawable.kemerahan
             )
             findNavController().navigate(
                 R.id.action_homeFragment_to_detailFacialSkinDisorderFragment,
                 bundle
             )
         }
+
+        // Navigasi untuk "Hyperpigmentation" card
         binding.cardHyperpigmentation.card.setOnClickListener {
             val bundle = bundleOf(
-                "image" to R.drawable.hyperpigmentation,
-                "facialSkinDisorder" to getString(R.string.hyperpigmentation),
-                "definition" to R.string.hyperpigmentation_definition,
-                "cause" to R.string.hyperpigmentation_cause,
-                "treatment" to R.string.hyperpigmentation_treatment,
-                "prevention" to R.string.hyperpigmentation_prevention,
+                "disorderInformation" to hyperpigmentationInfo,
+                "image" to R.drawable.hyperpigmentation
             )
             findNavController().navigate(
                 R.id.action_homeFragment_to_detailFacialSkinDisorderFragment,
                 bundle
             )
         }
+
+        // Navigasi untuk "Acne" card
         binding.cardAcne.card.setOnClickListener {
             val bundle = bundleOf(
-                "image" to R.drawable.acne,
-                "facialSkinDisorder" to getString(R.string.acne),
-                "definition" to R.string.acne_definition,
-                "cause" to R.string.acne_cause,
-                "treatment" to R.string.acne_treatment,
-                "prevention" to R.string.acne_prevention,
+                "disorderInformation" to acneInfo,
+                "image" to R.drawable.acne
             )
             findNavController().navigate(
                 R.id.action_homeFragment_to_detailFacialSkinDisorderFragment,
@@ -129,18 +242,29 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupUI() {
+        // Ambil informasi dari array disorderInformation
+        val acneInfo = disorderInformation[1] // Index untuk Jerawat
+        val hyperpigmentationInfo = disorderInformation[0] // Index untuk Hiperpigmentasi
+        val rednessInfo = disorderInformation[2] // Index untuk Kemerahan
+        val blackheadsInfo = disorderInformation[3] // Index untuk Komedo
+        val oilyInfo = disorderInformation[4] // Index untuk Berminyak
+        val normalInfo = disorderInformation[5] // Index untuk Normal
+
+        // Set data untuk card Acne
         binding.cardAcne.apply {
-            tvCard.text = getString(R.string.acne)
+            tvCard.text = acneInfo.name // Menggunakan data dari disorderInformation
             ivCard.setImageDrawable(
                 ResourcesCompat.getDrawable(
                     resources,
-                    R.drawable.acne,
+                    R.drawable.acne, // Gambar dari resource
                     null
                 )
             )
         }
+
+        // Set data untuk card Hyperpigmentation
         binding.cardHyperpigmentation.apply {
-            tvCard.text = getString(R.string.hyperpigmentation)
+            tvCard.text = hyperpigmentationInfo.name
             ivCard.setImageDrawable(
                 ResourcesCompat.getDrawable(
                     resources,
@@ -149,8 +273,10 @@ class HomeFragment : Fragment() {
                 )
             )
         }
+
+        // Set data untuk card Redness
         binding.cardRedness.apply {
-            tvCard.text = getString(R.string.redness)
+            tvCard.text = rednessInfo.name
             ivCard.setImageDrawable(
                 ResourcesCompat.getDrawable(
                     resources,
@@ -159,8 +285,10 @@ class HomeFragment : Fragment() {
                 )
             )
         }
+
+        // Set data untuk card Blackheads
         binding.cardBlackheads.apply {
-            tvCard.text = getString(R.string.blackheads)
+            tvCard.text = blackheadsInfo.name
             ivCard.setImageDrawable(
                 ResourcesCompat.getDrawable(
                     resources,
@@ -169,8 +297,10 @@ class HomeFragment : Fragment() {
                 )
             )
         }
+
+        // Set data untuk card Oily
         binding.cardOily.apply {
-            tvCard.text = getString(R.string.oily)
+            tvCard.text = oilyInfo.name
             ivCard.setImageDrawable(
                 ResourcesCompat.getDrawable(
                     resources,
@@ -179,8 +309,10 @@ class HomeFragment : Fragment() {
                 )
             )
         }
+
+        // Set data untuk card Normal
         binding.cardNormal.apply {
-            tvCard.text = getString(R.string.normal)
+            tvCard.text = normalInfo.name
             ivCard.setImageDrawable(
                 ResourcesCompat.getDrawable(
                     resources,

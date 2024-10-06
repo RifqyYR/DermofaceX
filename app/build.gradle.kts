@@ -22,7 +22,11 @@ android {
 
     buildTypes {
         debug {
-            buildConfigField("String", "API_URL", "\"https://6066-103-195-142-125.ngrok-free.app/\"")
+            buildConfigField(
+                "String",
+                "API_URL",
+                "\"https://6066-103-195-142-125.ngrok-free.app/\""
+            )
             buildConfigField("boolean", "CATALYST_DEBUG", "true")
             buildConfigField("boolean", "ALLOW_INVALID_CERTIFICATE", "true")
         }
@@ -54,6 +58,9 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+
+    // ViewPager
+    implementation(libs.androidx.viewpager2)
 
     // Navigation
     implementation(libs.androidx.navigation.fragment.ktx)

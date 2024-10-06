@@ -17,6 +17,7 @@
         app:layout_constraintRight_toRightOf="parent" />
 
     <FrameLayout
+        android:id="@+id/frameLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -39,11 +40,12 @@
 
     <TextView
         android:id="@+id/tv_classification_result"
-        style="@style/PrimaryMedium14Text"
+        style="@style/PrimaryTitleText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
-        app:layout_constraintBottom_toTopOf="@+id/tv_status"
+        android:layout_marginBottom="8dp"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/btn_take_picture"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         tools:text="classification_result" />
@@ -52,13 +54,35 @@
         android:id="@+id/tv_status"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="80dp"
-        android:text="Position your face in the oval"
+        android:layout_marginTop="32dp"
+        android:text="Dekatkan wajah Anda ke kamera"
         android:textAlignment="center"
         android:textColor="@color/white"
-        android:textSize="24dp"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_take_picture"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginBottom="28dp"
+        android:background="@drawable/circle_button"
+        app:backgroundTint="@color/primary"
+        app:elevation="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/prg_bar_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="44dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/btn_take_picture"
+        app:layout_constraintStart_toStartOf="@+id/btn_take_picture" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

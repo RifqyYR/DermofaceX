@@ -1,6 +1,5 @@
 package com.makassar.dermofacex.data.repository
 
-import android.util.Log
 import com.makassar.dermofacex.data.Resource
 import com.makassar.dermofacex.data.network.ApiService
 import com.makassar.dermofacex.utils.parseErrorMessageFromHttpException
@@ -19,7 +18,12 @@ class GeneralRepository(private val apiService: ApiService) {
             val result = apiService.classifyImage(image)
             emit(Resource.Success(result))
         } catch (e: HttpException) {
-            val errorMessage = parseErrorMessageFromHttpException(e)
+            // Periksa kode status HTTP
+            val errorMessage = when (e.code()) {
+                404 -> "Resource not found (404). The server could not find the requested resource."
+                500 -> "Internal Server Error (500). Something went wrong on the server."
+                else -> parseErrorMessageFromHttpException(e) // Metode untuk parsing error dari JSON atau lainnya
+            }
             emit(Resource.Error(errorMessage))
         } catch (e: Exception) {
             emit(Resource.Error(e.toString()))

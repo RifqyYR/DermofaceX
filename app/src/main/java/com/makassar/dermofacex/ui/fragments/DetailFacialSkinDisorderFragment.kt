@@ -4,11 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.makassar.dermofacex.R
+import com.google.android.material.tabs.TabLayoutMediator
+import com.makassar.dermofacex.data.DisorderInformation
 import com.makassar.dermofacex.databinding.FragmentDetailFacialSkinDisorderBinding
+import com.makassar.dermofacex.ui.adapters.DetailPagerAdapter
 
 class DetailFacialSkinDisorderFragment : Fragment() {
     private var _binding: FragmentDetailFacialSkinDisorderBinding? = null
@@ -25,102 +26,50 @@ class DetailFacialSkinDisorderFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Ambil data dari arguments
+        val disorder = arguments?.getSerializable("disorderInformation") as? DisorderInformation
         val image = arguments?.getInt("image")
-        val facialSkinDisorder = arguments?.getString("facialSkinDisorder")
-        val definition = arguments?.getInt("definition")
-        val cause = arguments?.getInt("cause")
-        val treatment = arguments?.getInt("treatment")
-        val prevention = arguments?.getInt("prevention")
 
-        setupUI(image, facialSkinDisorder, definition, cause, treatment, prevention)
+        // Cek apakah data tersedia
+        if (disorder != null && image != null) {
+            setupUI(disorder, image)
+            if (disorder.name !== "Normal") {
+                setupViewPager(disorder)
+            }
+        }
 
         setupButton()
     }
 
-    private fun setupUI(
-        image: Int?,
-        facialSkinDisorder: String?,
-        definition: Int?,
-        cause: Int?,
-        treatment: Int?,
-        prevention: Int?
-    ) {
-        if (facialSkinDisorder == "Normal") {
-            binding.dropdownTreatment.visibility = View.GONE
-            binding.tvDefinition.visibility = View.VISIBLE
-            binding.dropdownPrevention.visibility = View.GONE
-            binding.ivFacialSkinDisorder.setImageResource(image!!)
-            binding.tvFacialSkinDisorderTitle.text = facialSkinDisorder
-            binding.tvDefinition.text = getString(definition!!)
-            binding.tvCause.text = getString(cause!!)
-        }
-        binding.ivFacialSkinDisorder.setImageResource(image!!)
-        binding.tvFacialSkinDisorderTitle.text = facialSkinDisorder
-        binding.tvDefinition.text = getString(definition!!)
-        binding.tvCause.text = getString(cause!!)
-        binding.tvTreatment.text = getString(treatment!!)
-        binding.tvPrevention.text = getString(prevention!!)
+    private fun setupUI(disorder: DisorderInformation, image: Int?) {
+        // Menampilkan data dari object DisorderInformation
+        binding.ivFacialSkinDisorder.setImageResource(image!!) // Ambil dari arguments
+        binding.tvFacialSkinDisorderTitle.text = disorder.name
+        binding.tvDefinition.text = disorder.definition
+    }
+
+    private fun setupViewPager(disorder: DisorderInformation) {
+        // Buat adapter untuk ViewPager2
+        val adapter =
+            DetailPagerAdapter(
+                this,
+                disorder.cause,
+                disorder.treatment,
+                disorder.avoided_ingredients
+            )
+        binding.viewPager.adapter = adapter
+
+        // Hubungkan ViewPager2 dengan TabLayout
+        TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
+            when (position) {
+                0 -> tab.text = "Penyebab"
+                1 -> tab.text = "Penanganan"
+                2 -> tab.text = "Bahan Berbahaya"
+            }
+        }.attach()
     }
 
     private fun setupButton() {
-        binding.dropdownPrevention.setOnClickListener {
-            if (binding.tvPrevention.visibility == View.VISIBLE) {
-                binding.tvPrevention.visibility = View.GONE
-                binding.ivArrowPrevention.setImageDrawable(
-                    ContextCompat.getDrawable(
-                        requireContext(),
-                        R.drawable.baseline_keyboard_arrow_down_24
-                    )
-                )
-            } else {
-                binding.tvPrevention.visibility = View.VISIBLE
-                binding.ivArrowPrevention.setImageDrawable(
-                    ContextCompat.getDrawable(
-                        requireContext(),
-                        R.drawable.baseline_keyboard_arrow_up_24
-                    )
-                )
-            }
-        }
-        binding.dropdownTreatment.setOnClickListener {
-            if (binding.tvTreatment.visibility == View.VISIBLE) {
-                binding.tvTreatment.visibility = View.GONE
-                binding.ivArrowTreatment.setImageDrawable(
-                    ContextCompat.getDrawable(
-                        requireContext(),
-                        R.drawable.baseline_keyboard_arrow_down_24
-                    )
-                )
-            } else {
-                binding.tvTreatment.visibility = View.VISIBLE
-                binding.ivArrowTreatment.setImageDrawable(
-                    ContextCompat.getDrawable(
-                        requireContext(),
-                        R.drawable.baseline_keyboard_arrow_up_24
-                    )
-                )
-            }
-        }
-        binding.dropdownCause.setOnClickListener {
-            if (binding.tvCause.visibility == View.VISIBLE) {
-                binding.tvCause.visibility = View.GONE
-                binding.ivArrowCause.setImageDrawable(
-                    ContextCompat.getDrawable(
-                        requireContext(),
-                        R.drawable.baseline_keyboard_arrow_down_24
-                    )
-                )
-            } else {
-                binding.tvCause.visibility = View.VISIBLE
-                binding.ivArrowCause.setImageDrawable(
-                    ContextCompat.getDrawable(
-                        requireContext(),
-                        R.drawable.baseline_keyboard_arrow_up_24
-                    )
-                )
-            }
-        }
-
         binding.btnBack.btn.setOnClickListener {
             findNavController().popBackStack()
         }

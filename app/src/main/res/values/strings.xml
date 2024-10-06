@@ -1,10 +1,9 @@
 <resources>
-    <string name="app_name">A2RSkinDeep</string>
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="app_name">RAtwo SkinDeep</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="app_version">v1.0</string>
     <string name="greeting">Halo, selamat datang</string>
-    <string name="greeting_2">Bagaimana kabar Anda hari ini?</string>
+    <string name="greeting_2">Selamat datang di aplikasi\nRAtwo SkinDeep</string>
     <string name="check_your_face_skin">Cek Kulit\nWajah Anda</string>
     <string name="facial_skin_disorder_information">Informasi Gangguan Kulit Wajah</string>
     <string name="acne">Jerawat</string>
@@ -16,20 +15,34 @@
     <string name="application_information">Informasi Aplikasi</string>
     <string name="how_to_use">Cara Penggunaan</string>
     <string name="about_application">Tentang Aplikasi</string>
-    <string name="about_app_description">DermofaceX adalah sebuah aplikasi berbasis Android untuk melakukan klasifikasi gangguan kulit wajah. Saat ini DermofaceX hanya bisa melakukan klasifikasi pada 5 jenis gangguan kulit wajah yaitu jerawat, hiperpigmentasi, kemerahan, komedo, kulit berminyak, dan juga kulit normal.</string>
-    <string name="how_to_use_description">Berikut adalah cara penggunaan aplikasi DermofaceX.\n• Tekan tombol Cek Kulit Wajah Anda\n• Ambil gambar wajah Anda menggunakan kamera depan dengan 3 sisi yaitu tampak depan, tampak kanan, dan tampak kiri\n• Tunggu proses klasifikasi selesai</string>
+    <string name="app_description">
+        \t Apakah Anda ingin mengenali kondisi kulit Anda dengan cepat dan mudah tanpa harus pergi ke dokter? RAtwo SkinDeep adalah solusi yang tepat untuk Anda! Aplikasi Android ini dirancang khusus untuk membantu pengguna mengidentifikasi kondisi kulit wajah hanya dengan memanfaatkan foto. Dengan teknologi canggih, aplikasi ini mampu menganalisis foto wajah Anda dan memberikan hasil klasifikasi dalam hitungan detik, sehingga Anda dapat mengetahui masalah kulit yang mungkin terjadi tanpa memerlukan pengetahuan khusus.\n
+        \t Aplikasi ini dapat mendeteksi berbagai kondisi kulit yang umum, termasuk jerawat, hiperpigmentasi, kemerahan, komedo, kulit berminyak, hingga kulit normal. Selain mengidentifikasi kondisi kulit, RAtwo SkinDeep juga memberikan rekomendasi perawatan yang tepat untuk setiap masalah yang terdeteksi. Dengan begitu, Anda dapat merawat kulit Anda dengan lebih baik tanpa ribet.\n
+        \t Dengan antarmuka yang user-friendly dan navigasi yang sederhana, RAtwo SkinDeep sangat mudah digunakan oleh siapa saja. Aplikasi ini adalah solusi praktis untuk menjaga kesehatan kulit Anda, kapan saja dan di mana saja. Tidak perlu lagi khawatir dengan kondisi kulit Anda—RAtwo SkinDeep siap memberikan solusi instan dan tepat hanya dengan sentuhan jari.
+    </string>
+    <string name="instructions">
+    &#8226; Setelah membuka aplikasi, cari dan pilih opsi "Cek Kulit Wajah Anda" di menu utama untuk memulai proses analisis.\n
+    &#8226; Gunakan kamera aplikasi untuk mengambil foto wajah Anda secara langsung, atau pilih foto yang sudah ada dari galeri perangkat Anda.\n
+    &#8226; Pastikan wajah Anda terlihat dengan jelas di foto dan berada di tempat yang cukup terang. Pencahayaan yang baik akan membantu aplikasi memberikan hasil yang lebih akurat.\n
+    &#8226; Setelah Anda mengunggah foto, aplikasi akan secara otomatis menganalisis kondisi kulit Anda. Proses ini hanya memerlukan waktu beberapa detik.\n
+    &#8226; Setelah analisis selesai, aplikasi akan menampilkan informasi tentang kondisi kulit Anda, seperti apakah Anda memiliki jerawat, komedo, hiperpigmentasi, atau kondisi kulit lainnya.\n
+    &#8226; Berdasarkan hasil analisis, aplikasi juga akan memberikan saran perawatan yang sesuai dengan kondisi kulit yang telah diidentifikasi.
+    </string>
     <string name="acne_definition"><![CDATA[Jerawat adalah kondisi kulit yang umum yang terjadi ketika folikel rambut tersumbat. Sebum, minyak yang membantu menjaga kulit agar tidak kering dan sel kulit mati bisa menyumbat pori-pori.  Hal tersebut menyebabkan peradangan yang memiliki tanda berupa munculnya benjolan kecil yang terkadang berisi nanah di atas kulit.]]></string>
     <string name="cause">Penyebab</string>
     <string name="acne_cause"><![CDATA[Beberapa kondisi yang memicu munculnya kondisi ini, antara lain: \n* Produksi sebum berlebih, yaitu zat yang merupakan hasil produksi kelenjar minyak untuk mencegah kulit kering.\n* Sumbatan pada folikel rambut oleh campuran sel kulit mati dan sebum.\n* Bakteri jenis Propionibacterium acnes yang berkembang, menyumbat folikel rambut, serta menyebabkan peradangan.\n* Faktor genetik atau keturunan. Kamu bisa mengalaminya jika salah satu orangtua memiliki masalah jerawat.\n* Folikel yang tersumbat bisa membengkak dan membentuk komedo putih atau komedo hitam jika terpapar dengan udara luar. Kondisi tersebut jangan dianggap remeh. Sebab, bisa berkembang menjadi pustula, papula, nodul, atau bahkan kista, apabila terkontaminasi oleh bakteri kulit.\n* Hormon, yaitu saat aktivitas hormon androgen berlebih atau saat terjadi perubahan hormon saat masa menstruasi.\n* Penggunaan kosmetik yang tidak selalu cocok pada kulit setiap orang.\n* Stres memengaruhi gaya hidup seseorang, termasuk dalam pola makan yang dapat memicu jerawat.]]></string>
     <string name="back">Kembali</string>
-    <string name="treatment">Pengobatan</string>
+    <string name="treatment">Penanganan</string>
     <string name="acne_treatment">Beberapa langkah bisa kamu lakukan sebagai cara menyembuhkan jerawat, antara lain:\n* Mengurangi produksi minyak.\n* Melawan infeksi bakteri.\n* Mempercepat pergantian sel kulit dan mengurangi peradangan.\n\nBeberapa upaya lain yang dapat kamu lakukan untuk mengatasi jerawat, antara lain:\n* Membersihkan peralatan kosmetik dengan menggunakan sabun dan air hangat secara rutin.\n* Memilih kosmetik non-comedogenic, yang sifatnya tidak menutup pori-pori di kulit.\n* Menggunakan pelembap non-comedogenic, yang tidak dapat menyebabkan jerawat dan sesuai dengan jenis kulit.\n* Menghindari memencet dan memegang jerawat karena dapat membuatnya bertambah banyak.\n* Menghindari menggosok wajah dengan menggunakan kain atau sarung tangan dengan permukaan kasar.\n* Menjaga kebersihan tubuh dengan segera mandi setelah beraktivitas karena minyak berlebih di wajah dapat memicu terjadi jerawat.\n* Menjaga kebersihan wajah dengan membersihkan wajah dua kali dalam sehari, untuk mengangkat sel-sel kulit mati, minyak yang berlebihan, serta sisa kosmetik di permukaan kulit.</string>
     <string name="prevention">Cara Mencegah</string>
     <string name="acne_prevention">Ada beberapa tips yang bisa kamu coba untuk mencegah timbulnya masalah kulit ini, yaitu:\n* Rutin membersihkan wajah\n* Hidrasi tubuh dengan baik\n* Batasi penggunaan riasan wajah\n* Hindari menyentuh wajah sembarangan\n* Hindari paparan sinar matahari langsung\n* Cermat dalam memilih produk sampo yang digunakan\n* Pola makan sehat</string>
     <string name="hyperpigmentation_definition">“Hyper” berarti lebih banyak, dan “pigmen” berarti warna. Hiperpigmentasi adalah kondisi umum yang membuat beberapa area kulit lebih gelap dari area lainnya. Hiperpigmentasi dapat muncul sebagai bercak berwarna coklat, hitam, abu-abu, merah, atau merah muda. Bintik-bintik bercak itu terkadang disebut bintik-bintik penuaan atau bintik-bintik matahari. Bintik-bintik dapat terjadi hanya di satu area tubuh atau di seluruh tubuh.</string>
     <string name="hyperpigmentation_cause">Kulit mendapatkan warna dari zat yang disebut melanin, yang dibuat oleh sel-sel kulit. Ketika sel-sel kulit tersebut rusak atau tidak sehat, mereka dapat memproduksi terlalu banyak melanin. Kemudian melanin dapat menggumpal, sehingga menyebabkan suatu area kulit tampak lebih gelap.</string>
     <string name="hyperpigmentation_treatment">Tergantung pada penyebab hiperpigmentasi, dokter spesialis kulit akan menyarankan beberapa perubahan gaya hidup, seperti:\n* Menghindari kerusakan akibat sinar matahari dengan menghindari paparan sinar matahari, menggunakan tabir surya, dan mengenakan pakaian pelindung.\n* Menghentikan konsumsi obat apa pun yang dapat menyebabkannya.\n* Mengonsumsi vitamin.</string>
-    <string name="hyperpigmentation_prevention">Hiperpigmentasi tidak selalu bisa dicegah. Namun, kamu dapat melakukan perawatan kulit dengan:\n * Menggunakan tabir surya dengan SPF minimal 30.\n * Memakai topi atau pakaian yang menghalangi sinar matahari.\n * Menghindari sinar matahari pada siang hari saat terik, yang biasanya pukul 10 pagi hingga 4 sore.\n * Menghindari obat-obatan tertentu yang berisiko pada hiperpigmentasi.</string>
+    <string name="hyperpigmentation_prevention">Hiperpigmentasi tidak selalu bisa dicegah, tetapi kamu dapat melakukan perawatan kulit dengan beberapa langkah pencegahan. Gunakan tabir surya dengan SPF minimal 30, dan kenakan topi atau pakaian yang dapat melindungi kulit dari sinar matahari. Hindari paparan sinar matahari langsung pada jam-jam terik, biasanya antara pukul 10 pagi hingga 4 sore. Selain itu, jauhi obat-obatan tertentu yang berisiko memicu hiperpigmentasi.
+
+
+</string>
     <string name="redness_definition">Kemerahan adalah perubahan nyata pada tekstur atau warna pada kulit yang disebabkan oleh peradangan. Kulit yang mengalami ruam bisa mengalami gatal-gatal, benjol, mengelupas, bersisik, dan iritasi. Masalah ini juga sering digambarkan dengan kulit yang memerah, atau berwarna ungu atau abu-abu pada warna kulit yang lebih gelap.</string>
     <string name="redness_cause">Penyebab ruam kulit dapat karena efek samping dari obat-obatan, reaksi alergi, atau penggunaan kosmetik. Selain itu, berikut beberapa kondisi yang juga bisa menyebabkan ruam:\n* Dermatitis kontak\n* Ruam popok\n* Sengatan dan gigitan serangga\n* Infeksi jamur\n* Cacar air\n* Cacar api\n* Kurap\n* Scarlet fever\n* Campak\n* Alergi obat\n* Luka bakar\n* Lupus</string>
     <string name="redness_treatment">Pengobatan dari masalah pada kulit ini perlu disesuaikan dengan penyakit yang dialami. Umumnya, pengobatan gangguan ruam pada kulit ini berupa pemberian obat oral atau topikal, terapi, atau operasi. Ada banyak sekali krim dan salep yang dijual bebas dan ampuh untuk mengatasi ruam pada kulit. Produk ini mampu mengendalikan rasa gatal, bengkak, dan kemerahan. Namun, alangkah baiknya membicarakan dengan dokter untuk mengetahui penyebab ruam kulit dan mendapatkan pengobatan yang tepat.</string>
@@ -52,4 +65,8 @@
     <string name="cek_sekarang">Cek Sekarang</string>
     <string name="face_detected">Wajah terdeteksi</string>
     <string name="position_your_face_in_the_oval">Posisikan wajah Anda pada oval</string>
+    <string name="camera">Live Camera</string>
+    <string name="gallery">Galeri</string>
+    <string name="select_image_source">Opsi pengambilan gambar</string>
+    <string name="processing_image">Memproses citra</string>
 </resources>

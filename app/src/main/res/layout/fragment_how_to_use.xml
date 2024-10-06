@@ -25,7 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:fontFamily="@font/poppins_regular"
+            android:fontFamily="@font/poppins_semibold"
             android:foregroundGravity="center"
             android:gravity="center"
             android:text="Kembali"
@@ -41,13 +41,23 @@
         android:fontFamily="@font/poppins_bold"
         android:text="@string/how_to_use"
         android:textColor="@color/primary"
-        android:textSize="18sp" />
+        android:textSize="20sp" />
 
-    <TextView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:fontFamily="@font/poppins_regular"
-        android:justificationMode="inter_word"
-        android:text="@string/how_to_use_description" />
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/tv_instructions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_regular"
+            android:justificationMode="inter_word"
+            android:lineSpacingExtra="6dp"
+            android:text="@string/instructions"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+    </ScrollView>
 </LinearLayout>

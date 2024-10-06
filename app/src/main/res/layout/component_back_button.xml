@@ -18,7 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:fontFamily="@font/poppins_regular"
+        android:fontFamily="@font/poppins_semibold"
         android:foregroundGravity="center"
         android:gravity="center"
         android:text="@string/back"

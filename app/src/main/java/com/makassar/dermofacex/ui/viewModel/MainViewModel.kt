@@ -17,7 +17,7 @@ class MainViewModel(
     var image: MultipartBody.Part? = null
 
     private var _classify: MutableStateFlow<Resource<out ClassificationResponse>> =
-        MutableStateFlow(Resource.Loading())
+        MutableStateFlow(Resource.Empty())
     val classify: StateFlow<Resource<out ClassificationResponse>> get() = _classify
 
     fun getClassifyResult(

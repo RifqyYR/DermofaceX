@@ -2,12 +2,9 @@ package com.makassar.dermofacex.ui.fragments
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.graphics.PointF
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -27,13 +24,11 @@ import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.google.mlkit.vision.common.InputImage
 import com.makassar.dermofacex.R
 import com.makassar.dermofacex.data.Resource
 import com.makassar.dermofacex.databinding.FragmentCameraBinding
 import com.makassar.dermofacex.di.viewModelModule
 import com.makassar.dermofacex.ui.viewModel.MainViewModel
-import com.makassar.dermofacex.utils.FaceDetectionProcessor
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -45,8 +40,6 @@ import java.io.File
 import java.io.IOException
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
-import kotlin.math.abs
-import kotlin.math.sqrt
 
 class CameraFragment : Fragment() {
     private var _binding: FragmentCameraBinding? = null
@@ -56,10 +49,6 @@ class CameraFragment : Fragment() {
     private var imageCapture: ImageCapture? = null
     private lateinit var outputDirectory: File
     private lateinit var cameraExecutor: ExecutorService
-    private val faceDetectionProcessor = FaceDetectionProcessor()
-    val faceTracker = mutableMapOf<Int, Int>()
-    private val handler = Handler(Looper.getMainLooper())
-    private val delayMillis = 5000L // 5 seconds
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -85,16 +74,12 @@ class CameraFragment : Fragment() {
             )
         }
 
+        binding.btnTakePicture.setOnClickListener {
+            takePhoto()
+        }
         getClassificationResult()
 
         outputDirectory = getOutputDirectory()
-    }
-
-    private val takePhotoRunnable = object : Runnable {
-        override fun run() {
-            takePhoto()
-            binding.tvStatus.text = getString(R.string.face_detected)
-        }
     }
 
     @OptIn(ExperimentalGetImage::class)
@@ -102,67 +87,6 @@ class CameraFragment : Fragment() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
         val imageAnalysis = ImageAnalysis.Builder()
             .build()
-            .also {
-                it.setAnalyzer(cameraExecutor) { imageProxy ->
-                    val mediaImage = imageProxy.image
-                    if (mediaImage != null) {
-                        val rotationDegrees = imageProxy.imageInfo.rotationDegrees
-                        val image = InputImage.fromMediaImage(mediaImage, rotationDegrees)
-
-                        faceDetectionProcessor.process(image, { faces ->
-                            for (face in faces) {
-                                val bounds = face.boundingBox
-                                val faceCenter =
-                                    PointF(bounds.centerX().toFloat(), bounds.centerY().toFloat())
-
-                                val headEulerAngleY =
-                                    face.headEulerAngleY // Yaw angle (rotation around y-axis)
-                                val headEulerAngleZ =
-                                    face.headEulerAngleZ // Roll angle (rotation around z-axis)
-
-                                // Get the oval bounds
-                                val ovalBounds = binding.ovalView.getOvalRect()
-
-                                val distanceFromCenter = sqrt(
-                                    (((faceCenter.x - ovalBounds.centerX()) * (faceCenter.x - ovalBounds.centerX())) / (ovalBounds.width() / 2 * ovalBounds.width() / 2) +
-                                            ((faceCenter.y - ovalBounds.centerY()) * (faceCenter.y - ovalBounds.centerY())) / (ovalBounds.height() / 2 * ovalBounds.height() / 2)).toDouble()
-                                )
-
-                                // Check if the center of the face's bounding box is within the oval
-                                if (distanceFromCenter in 0.58F..0.62F && (abs(headEulerAngleY) < 2.5 && abs(
-                                        headEulerAngleZ
-                                    ) < 30)
-                                ) {
-                                    // The face is within the oval, capture the image
-                                    val trackingId = face.trackingId ?: return@process
-                                    faceTracker[trackingId] =
-                                        faceTracker.getOrDefault(trackingId, 0) + 1
-
-                                    // If the face has been detected in 3 consecutive frames, consider it a real face
-                                    if (faceTracker[trackingId]!! >= 3) {
-                                        // Remove any previous callbacks to prevent multiple executions
-                                        handler.removeCallbacks(takePhotoRunnable)
-
-                                        // Post the Runnable to be executed after the delay
-                                        handler.postDelayed(takePhotoRunnable, delayMillis)
-                                    }
-                                } else {
-                                    binding.tvStatus.text =
-                                        getString(R.string.position_your_face_in_the_oval)
-                                }
-                            }
-
-                            imageProxy.close()
-                        }, { e ->
-                            binding.tvStatus.text =
-                                getString(R.string.position_your_face_in_the_oval)
-                            Log.e(TAG, "Face detection failed", e)
-                            imageProxy.close()
-                        })
-                    }
-                }
-            }
-
         cameraProviderFuture.addListener({
 
             // Used to bind the lifecycle of cameras to the lifecycle owner
@@ -247,8 +171,15 @@ class CameraFragment : Fragment() {
         lifecycleScope.launch {
             viewModel.classify.collectLatest { result ->
                 when (result) {
-                    is Resource.Empty -> binding.tvClassificationResult.text = "Tidak Ditemukan"
+                    is Resource.Empty -> {
+                        binding.prgBarButton.visibility = View.GONE
+                        binding.btnTakePicture.visibility = View.VISIBLE
+                    }
+
                     is Resource.Error -> {
+                        binding.prgBarButton.visibility = View.GONE
+                        binding.btnTakePicture.visibility = View.VISIBLE
+                        binding.tvClassificationResult.text = ""
                         Toast.makeText(
                             requireContext(),
                             "Terjadi Kesalahan",
@@ -256,8 +187,30 @@ class CameraFragment : Fragment() {
                         ).show()
                     }
 
-                    is Resource.Loading -> binding.tvClassificationResult.text = "Memproses citra"
-                    is Resource.Success -> binding.tvClassificationResult.text = result.data?.result
+                    is Resource.Loading -> {
+                        binding.tvClassificationResult.text = getString(R.string.processing_image)
+                        binding.prgBarButton.visibility = View.VISIBLE
+                        binding.btnTakePicture.visibility = View.INVISIBLE
+                    }
+
+                    is Resource.Success -> {
+                        binding.tvClassificationResult.text = result.data?.result
+                        binding.prgBarButton.visibility = View.GONE
+                        binding.btnTakePicture.visibility = View.VISIBLE
+
+                        val bundle = Bundle()
+                        val bottomSheetResult = BottomSheetResultFragment()
+
+                        bundle.putString(
+                            BottomSheetResultFragment.DISORDER_NAME,
+                            result.data?.result
+                        )
+                        bottomSheetResult.arguments = bundle
+                        bottomSheetResult.show(
+                            requireActivity().supportFragmentManager,
+                            bottomSheetResult.tag
+                        )
+                    }
                 }
             }
         }
