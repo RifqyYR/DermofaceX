@@ -7,17 +7,26 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.makassar.dermofacex.R
+import com.makassar.dermofacex.data.Resource
 import com.makassar.dermofacex.databinding.FragmentHomeBinding
 import com.makassar.dermofacex.ui.viewModel.MainViewModel
 import com.makassar.dermofacex.utils.disorderInformation
+import com.makassar.dermofacex.utils.getFileFromUri
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class HomeFragment : Fragment() {
@@ -26,6 +35,8 @@ class HomeFragment : Fragment() {
 
     private val viewModel: MainViewModel by viewModel()
     private lateinit var galleryLauncher: ActivityResultLauncher<Intent>
+
+    var isResultShown = false // Flag untuk mengontrol satu kali tampil
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,6 +52,7 @@ class HomeFragment : Fragment() {
         setupButton()
 
         setupGalleryLauncher()
+        getClassificationResult()
     }
 
     private fun setupGalleryLauncher() {
@@ -89,58 +101,51 @@ class HomeFragment : Fragment() {
 
     private fun uploadImageAndShowResult(imageUri: Uri) {
         // Convert URI ke file atau inputStream sesuai kebutuhan API
-//        val imageFile = getFileFromUri(requireContext(), imageUri)
-//
-//        val requestBody = imageFile.asRequestBody("image/*".toMediaTypeOrNull())
-//        val imagePart = MultipartBody.Part.createFormData("image", imageFile.name, requestBody)
-//        viewModel.getClassifyResult(imagePart)
-//        lifecycleScope.launch {
-//            viewModel.classify.collectLatest { result ->
-//                when (result) {
-//                    is Resource.Empty -> {
-//                        showLoading(false)
-//                    }
-//
-//                    is Resource.Error -> {
-//                        showLoading(false)
-//                        Toast.makeText(
-//                            requireContext(),
-//                            "Terjadi Kesalahan",
-//                            Toast.LENGTH_SHORT
-//                        ).show()
-//                    }
-//
-//                    is Resource.Loading -> showLoading(true)
-//                    is Resource.Success -> {
-//                        showLoading(false)
-//                        val bundle = Bundle()
-//                        val bottomSheetResult = BottomSheetResultFragment()
-//
-//                        bundle.putString(
-//                            BottomSheetResultFragment.DISORDER_NAME,
-//                            result.data?.result
-//                        )
-//                        bottomSheetResult.arguments = bundle
-//                        bottomSheetResult.show(
-//                            requireActivity().supportFragmentManager,
-//                            bottomSheetResult.tag
-//                        )
-//                    }
-//                }
-//            }
-//        }
-        val bundle = Bundle()
-        val bottomSheetResult = BottomSheetResultFragment()
+        val imageFile = getFileFromUri(requireContext(), imageUri)
 
-        bundle.putString(
-            BottomSheetResultFragment.DISORDER_NAME,
-            "Hiperpigmentasi"
-        )
-        bottomSheetResult.arguments = bundle
-        bottomSheetResult.show(
-            requireActivity().supportFragmentManager,
-            bottomSheetResult.tag
-        )
+        val requestBody = imageFile.asRequestBody("image/*".toMediaTypeOrNull())
+        val imagePart = MultipartBody.Part.createFormData("image", imageFile.name, requestBody)
+        viewModel.getClassifyResult(imagePart)
+    }
+
+    private fun getClassificationResult() {
+        lifecycleScope.launch {
+            viewModel.classify.collectLatest { result ->
+                when (result) {
+                    is Resource.Empty -> {
+                        showLoading(false)
+                    }
+
+                    is Resource.Error -> {
+                        showLoading(false)
+                        Toast.makeText(
+                            requireContext(),
+                            "Terjadi Kesalahan",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        isResultShown = false
+                    }
+
+                    is Resource.Loading -> showLoading(true)
+                    is Resource.Success -> {
+                        showLoading(false)
+                        val bundle = Bundle()
+                        val bottomSheetResult = BottomSheetResultFragment()
+
+                        bundle.putString(
+                            BottomSheetResultFragment.DISORDER_NAME,
+                            result.data?.result
+                        )
+                        bottomSheetResult.arguments = bundle
+                        bottomSheetResult.show(
+                            requireActivity().supportFragmentManager,
+                            bottomSheetResult.tag
+                        )
+                        isResultShown = true
+                    }
+                }
+            }
+        }
     }
 
     private fun pickImageFromGallery() {

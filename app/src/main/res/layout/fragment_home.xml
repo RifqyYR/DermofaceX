@@ -5,191 +5,203 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/primary">
+        android:layout_height="match_parent">
 
-        <LinearLayout
-            android:id="@+id/linearLayout"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:paddingHorizontal="16dp"
-            android:paddingTop="24dp"
-            tools:context=".ui.fragments.HomeFragment">
-
-            <TextView
-                android:id="@+id/tv_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/poppins_bold"
-                android:text="@string/greeting_2"
-                android:textColor="@color/white"
-                android:textSize="20sp" />
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/card_check_your_face_skin"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                app:strokeColor="#99FFFFFF"
-                app:strokeWidth="1.5dp">
-
-                <ImageView
-                    android:id="@+id/iv_bg_card"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/card_background"
-                    android:scaleType="fitXY" />
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingHorizontal="16dp"
-                    android:paddingVertical="23dp">
-
-                    <TextView
-                        android:id="@+id/tv_check_your_face_skin"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:text="@string/check_your_face_skin"
-                        android:textColor="@color/white"
-                        android:textSize="18sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <ImageView
-                        android:id="@+id/ic_scan"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="end|center_vertical"
-                        android:src="@drawable/ic_face_skin_scan"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </com.google.android.material.card.MaterialCardView>
-        </LinearLayout>
-
-        <com.google.android.material.card.MaterialCardView
-            style="@style/CustomCardViewStyle"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/background"
-            android:backgroundTint="@color/background"
-            app:contentPaddingBottom="16dp"
-            app:contentPaddingLeft="16dp"
-            app:contentPaddingRight="16dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/guideline">
+            android:background="@color/primary">
 
             <LinearLayout
+                android:id="@+id/linearLayout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingHorizontal="16dp"
+                android:paddingTop="24dp"
+                tools:context=".ui.fragments.HomeFragment">
 
                 <TextView
-                    android:id="@+id/tv_information_section"
+                    android:id="@+id/tv_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    android:fontFamily="@font/poppins_semibold"
-                    android:text="@string/facial_skin_disorder_information"
-                    android:textSize="16sp" />
+                    android:fontFamily="@font/poppins_bold"
+                    android:text="@string/greeting_2"
+                    android:textColor="@color/white"
+                    android:textSize="20sp" />
 
-                <GridLayout
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card_check_your_face_skin"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:columnCount="1"
-                    android:rowCount="2">
+                    android:layout_marginTop="20dp"
+                    app:strokeColor="#99FFFFFF"
+                    app:strokeWidth="1.5dp">
 
-                    <LinearLayout
+                    <ImageView
+                        android:id="@+id/iv_bg_card"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/card_background"
+                        android:scaleType="fitXY" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:paddingHorizontal="16dp"
+                        android:paddingVertical="23dp">
 
-                        <include
-                            android:id="@+id/card_acne"
-                            layout="@layout/component_card_facial_skin_disorder_information" />
-
-                        <Space
+                        <TextView
+                            android:id="@+id/tv_check_your_face_skin"
                             android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1" />
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppins_semibold"
+                            android:text="@string/check_your_face_skin"
+                            android:textColor="@color/white"
+                            android:textSize="18sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
-                        <include
-                            android:id="@+id/card_hyperpigmentation"
-                            layout="@layout/component_card_facial_skin_disorder_information" />
-
-                        <Space
+                        <ImageView
+                            android:id="@+id/ic_scan"
                             android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1" />
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end|center_vertical"
+                            android:src="@drawable/ic_face_skin_scan"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
 
-                        <include
-                            android:id="@+id/card_redness"
-                            layout="@layout/component_card_facial_skin_disorder_information" />
-                    </LinearLayout>
+            <com.google.android.material.card.MaterialCardView
+                style="@style/CustomCardViewStyle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/background"
+                android:backgroundTint="@color/background"
+                app:contentPaddingBottom="16dp"
+                app:contentPaddingLeft="16dp"
+                app:contentPaddingRight="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/guideline">
 
-                    <LinearLayout
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_information_section"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:text="@string/facial_skin_disorder_information"
+                        android:textSize="16sp" />
+
+                    <GridLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:orientation="horizontal">
+                        android:columnCount="1"
+                        android:rowCount="2">
 
-                        <include
-                            android:id="@+id/card_blackheads"
-                            layout="@layout/component_card_facial_skin_disorder_information" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
 
-                        <Space
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1" />
+                            <include
+                                android:id="@+id/card_acne"
+                                layout="@layout/component_card_facial_skin_disorder_information" />
 
-                        <include
-                            android:id="@+id/card_oily"
-                            layout="@layout/component_card_facial_skin_disorder_information" />
+                            <Space
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1" />
 
-                        <Space
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1" />
+                            <include
+                                android:id="@+id/card_hyperpigmentation"
+                                layout="@layout/component_card_facial_skin_disorder_information" />
 
-                        <include
-                            android:id="@+id/card_normal"
-                            layout="@layout/component_card_facial_skin_disorder_information" />
-                    </LinearLayout>
-                </GridLayout>
+                            <Space
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    android:fontFamily="@font/poppins_semibold"
-                    android:text="@string/application_information"
-                    android:textSize="16sp" />
+                            <include
+                                android:id="@+id/card_redness"
+                                layout="@layout/component_card_facial_skin_disorder_information" />
+                        </LinearLayout>
 
-                <include
-                    android:id="@+id/btn_how_to_use"
-                    layout="@layout/component_button_application_information"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:orientation="horizontal">
 
-                <include
-                    android:id="@+id/btn_application_information"
-                    layout="@layout/component_button_application_information"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="8dp" />
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
+                            <include
+                                android:id="@+id/card_blackheads"
+                                layout="@layout/component_card_facial_skin_disorder_information" />
+
+                            <Space
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1" />
+
+                            <include
+                                android:id="@+id/card_oily"
+                                layout="@layout/component_card_facial_skin_disorder_information" />
+
+                            <Space
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1" />
+
+                            <include
+                                android:id="@+id/card_normal"
+                                layout="@layout/component_card_facial_skin_disorder_information" />
+                        </LinearLayout>
+                    </GridLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:text="@string/application_information"
+                        android:textSize="16sp" />
+
+                    <include
+                        android:id="@+id/btn_how_to_use"
+                        layout="@layout/component_button_application_information"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp" />
+
+                    <include
+                        android:id="@+id/btn_application_information"
+                        layout="@layout/component_button_application_information"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="8dp" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_begin="260dp" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <!-- Overlay semi-transparan -->
         <View
@@ -205,17 +217,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_begin="260dp" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            android:visibility="gone" />
+    </FrameLayout>
 </androidx.core.widget.NestedScrollView>

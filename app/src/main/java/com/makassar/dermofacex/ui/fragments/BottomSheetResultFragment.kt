@@ -36,10 +36,16 @@ class BottomSheetResultFragment : BottomSheetDialogFragment() {
     private fun setupUI(disorder: DisorderInformation) {
         binding.title.text = disorder.name
         binding.tvDefinition.text = disorder.definition
-        binding.tvCause.text = disorder.cause
-        binding.tvPrevention.text = disorder.prevention
-        binding.tvAvoidedIngredients.text =
-            disorder.avoided_ingredients.joinToString(separator = "\n") { "• $it" }
+        if (disorder.name === "Normal") {
+            binding.tvCauseTitle.visibility = View.GONE
+            binding.tvPreventionTitle.visibility = View.GONE
+            binding.tvAvoidedIngredientsTitle.visibility = View.GONE
+        } else {
+            binding.tvCause.text = disorder.cause
+            binding.tvPrevention.text = disorder.prevention
+            binding.tvAvoidedIngredients.text =
+                disorder.avoided_ingredients.joinToString(separator = "\n") { "• $it" }
+        }
     }
 
     override fun onDestroy() {
