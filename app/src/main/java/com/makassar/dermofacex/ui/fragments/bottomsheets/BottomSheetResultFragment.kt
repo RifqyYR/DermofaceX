@@ -1,4 +1,4 @@
-package com.makassar.dermofacex.ui.fragments
+package com.makassar.dermofacex.ui.fragments.bottomsheets
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -29,12 +29,13 @@ class BottomSheetResultFragment : BottomSheetDialogFragment() {
         bottomSheetBehavior.peekHeight = (resources.displayMetrics.heightPixels * 0.4).toInt()
 
         val disorderName = arguments?.getString(DISORDER_NAME)
+        val disorderProb = arguments?.getString(DISORDER_PROB)
         val disorder: DisorderInformation = disorderInformation.find { it.name == disorderName }!!
-        setupUI(disorder)
+        setupUI(disorder, disorderProb)
     }
 
-    private fun setupUI(disorder: DisorderInformation) {
-        binding.title.text = disorder.name
+    private fun setupUI(disorder: DisorderInformation, disorderProb: String?) {
+        "${disorder.name} - $disorderProb".also { binding.title.text = it }
         binding.tvDefinition.text = disorder.definition
         if (disorder.name === "Normal") {
             binding.tvCauseTitle.visibility = View.GONE
@@ -55,5 +56,6 @@ class BottomSheetResultFragment : BottomSheetDialogFragment() {
 
     companion object {
         const val DISORDER_NAME = "DISORDER_NAME"
+        const val DISORDER_PROB = "DISORDER_PROB"
     }
 }

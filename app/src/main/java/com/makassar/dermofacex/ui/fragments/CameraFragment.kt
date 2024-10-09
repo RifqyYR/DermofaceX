@@ -25,9 +25,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.makassar.dermofacex.R
+import com.makassar.dermofacex.data.ClassificationProbabilities
 import com.makassar.dermofacex.data.Resource
 import com.makassar.dermofacex.databinding.FragmentCameraBinding
 import com.makassar.dermofacex.di.viewModelModule
+import com.makassar.dermofacex.ui.fragments.bottomsheets.BottomSheetProbabilityResultFragment
 import com.makassar.dermofacex.ui.viewModel.MainViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -152,7 +154,7 @@ class CameraFragment : Fragment() {
         }
         val requestFile = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
         val body = MultipartBody.Part.createFormData("image", file.name, requestFile)
-        viewModel.getClassifyResult(body)
+        viewModel.getProbabilityResult(body)
     }
 
     private fun readFileFromUri(uri: Uri): ByteArray? {
@@ -169,7 +171,7 @@ class CameraFragment : Fragment() {
 
     private fun getClassificationResult() {
         lifecycleScope.launch {
-            viewModel.classify.collectLatest { result ->
+            viewModel.probability.collectLatest { result ->
                 when (result) {
                     is Resource.Empty -> {
                         binding.prgBarButton.visibility = View.GONE
@@ -194,21 +196,28 @@ class CameraFragment : Fragment() {
                     }
 
                     is Resource.Success -> {
-                        binding.tvClassificationResult.text = result.data?.result
+                        binding.tvClassificationResult.text = ""
                         binding.prgBarButton.visibility = View.GONE
                         binding.btnTakePicture.visibility = View.VISIBLE
 
                         val bundle = Bundle()
-                        val bottomSheetResult = BottomSheetResultFragment()
+                        val bottomSheetResult = BottomSheetProbabilityResultFragment()
+                        val clsProb = ClassificationProbabilities(
+                            result.data?.classProbabilitiesXgb!!,
+                            result.data.classProbabilitiesCb!!,
+                            result.data.classProbabilitiesCnn!!,
+                            result.data.classProbabilitiesLgb!!,
+                            result.data.classProbabilitiesYolo!!,
+                            result.data.classProbabilitiesCnnExFeat!!,
+                        )
 
-                        bundle.putString(
-                            BottomSheetResultFragment.DISORDER_NAME,
-                            result.data?.result
+                        bundle.putSerializable(
+                            BottomSheetProbabilityResultFragment.CLASSIFICATION_PROBABILITY,
+                            clsProb
                         )
                         bottomSheetResult.arguments = bundle
                         bottomSheetResult.show(
-                            requireActivity().supportFragmentManager,
-                            bottomSheetResult.tag
+                            requireActivity().supportFragmentManager, bottomSheetResult.tag
                         )
                     }
                 }
@@ -261,6 +270,7 @@ class CameraFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        viewModel.resetClassifyState()
         val cameraProvider = ProcessCameraProvider.getInstance(requireContext()).get()
         cameraProvider.unbindAll()
         cameraExecutor.shutdown()

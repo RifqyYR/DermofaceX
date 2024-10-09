@@ -11,7 +11,7 @@
         android:orientation="vertical"
         android:paddingHorizontal="16dp"
         android:paddingVertical="32dp"
-        tools:context=".ui.fragments.BottomSheetResultFragment">
+        tools:context=".ui.fragments.bottomsheets.BottomSheetResultFragment">
 
         <TextView
             android:id="@+id/title"

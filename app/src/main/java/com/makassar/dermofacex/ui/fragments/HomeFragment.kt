@@ -17,8 +17,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.makassar.dermofacex.R
+import com.makassar.dermofacex.data.ClassificationProbabilities
 import com.makassar.dermofacex.data.Resource
 import com.makassar.dermofacex.databinding.FragmentHomeBinding
+import com.makassar.dermofacex.ui.fragments.bottomsheets.BottomSheetProbabilityResultFragment
 import com.makassar.dermofacex.ui.viewModel.MainViewModel
 import com.makassar.dermofacex.utils.disorderInformation
 import com.makassar.dermofacex.utils.getFileFromUri
@@ -39,8 +41,7 @@ class HomeFragment : Fragment() {
     var isResultShown = false // Flag untuk mengontrol satu kali tampil
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
@@ -50,6 +51,7 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupUI()
         setupButton()
+        viewModel.resetClassifyState()
 
         setupGalleryLauncher()
         getClassificationResult()
@@ -101,16 +103,21 @@ class HomeFragment : Fragment() {
 
     private fun uploadImageAndShowResult(imageUri: Uri) {
         // Convert URI ke file atau inputStream sesuai kebutuhan API
+        if (viewModel.classify.value is Resource.Success) {
+            viewModel.resetClassifyState() // Reset state jika masih ada hasil sukses sebelumnya
+        }
         val imageFile = getFileFromUri(requireContext(), imageUri)
 
         val requestBody = imageFile.asRequestBody("image/*".toMediaTypeOrNull())
         val imagePart = MultipartBody.Part.createFormData("image", imageFile.name, requestBody)
-        viewModel.getClassifyResult(imagePart)
+
+        isResultShown = false
+        viewModel.getProbabilityResult(imagePart)
     }
 
     private fun getClassificationResult() {
         lifecycleScope.launch {
-            viewModel.classify.collectLatest { result ->
+            viewModel.probability.collectLatest { result ->
                 when (result) {
                     is Resource.Empty -> {
                         showLoading(false)
@@ -119,9 +126,7 @@ class HomeFragment : Fragment() {
                     is Resource.Error -> {
                         showLoading(false)
                         Toast.makeText(
-                            requireContext(),
-                            "Terjadi Kesalahan",
-                            Toast.LENGTH_SHORT
+                            requireContext(), "Terjadi Kesalahan", Toast.LENGTH_SHORT
                         ).show()
                         isResultShown = false
                     }
@@ -129,19 +134,29 @@ class HomeFragment : Fragment() {
                     is Resource.Loading -> showLoading(true)
                     is Resource.Success -> {
                         showLoading(false)
-                        val bundle = Bundle()
-                        val bottomSheetResult = BottomSheetResultFragment()
+                        if (!isResultShown) {
+                            val bundle = Bundle()
+                            val bottomSheetResult = BottomSheetProbabilityResultFragment()
+                            val clsProb = ClassificationProbabilities(
+                                result.data?.classProbabilitiesXgb!!,
+                                result.data.classProbabilitiesCb!!,
+                                result.data.classProbabilitiesCnn!!,
+                                result.data.classProbabilitiesLgb!!,
+                                result.data.classProbabilitiesYolo!!,
+                                result.data.classProbabilitiesCnnExFeat!!,
+                            )
 
-                        bundle.putString(
-                            BottomSheetResultFragment.DISORDER_NAME,
-                            result.data?.result
-                        )
-                        bottomSheetResult.arguments = bundle
-                        bottomSheetResult.show(
-                            requireActivity().supportFragmentManager,
-                            bottomSheetResult.tag
-                        )
-                        isResultShown = true
+                            bundle.putSerializable(
+                                BottomSheetProbabilityResultFragment.CLASSIFICATION_PROBABILITY,
+                                clsProb
+                            )
+                            bottomSheetResult.arguments = bundle
+                            bottomSheetResult.show(
+                                requireActivity().supportFragmentManager, bottomSheetResult.tag
+                            )
+                            isResultShown = true
+                        }
+                        viewModel.resetClassifyState()
                     }
                 }
             }
@@ -173,44 +188,37 @@ class HomeFragment : Fragment() {
                 "image" to R.drawable.normal // Gambar tetap dari drawable resource
             )
             findNavController().navigate(
-                R.id.action_homeFragment_to_detailFacialSkinDisorderFragment,
-                bundle
+                R.id.action_homeFragment_to_detailFacialSkinDisorderFragment, bundle
             )
         }
 
         // Navigasi untuk "Oily" card
         binding.cardOily.card.setOnClickListener {
             val bundle = bundleOf(
-                "disorderInformation" to oilyInfo,
-                "image" to R.drawable.oily
+                "disorderInformation" to oilyInfo, "image" to R.drawable.oily
             )
             findNavController().navigate(
-                R.id.action_homeFragment_to_detailFacialSkinDisorderFragment,
-                bundle
+                R.id.action_homeFragment_to_detailFacialSkinDisorderFragment, bundle
             )
         }
 
         // Navigasi untuk "Blackheads" card
         binding.cardBlackheads.card.setOnClickListener {
             val bundle = bundleOf(
-                "disorderInformation" to blackheadsInfo,
-                "image" to R.drawable.komedo
+                "disorderInformation" to blackheadsInfo, "image" to R.drawable.komedo
             )
             findNavController().navigate(
-                R.id.action_homeFragment_to_detailFacialSkinDisorderFragment,
-                bundle
+                R.id.action_homeFragment_to_detailFacialSkinDisorderFragment, bundle
             )
         }
 
         // Navigasi untuk "Redness" card
         binding.cardRedness.card.setOnClickListener {
             val bundle = bundleOf(
-                "disorderInformation" to rednessInfo,
-                "image" to R.drawable.kemerahan
+                "disorderInformation" to rednessInfo, "image" to R.drawable.kemerahan
             )
             findNavController().navigate(
-                R.id.action_homeFragment_to_detailFacialSkinDisorderFragment,
-                bundle
+                R.id.action_homeFragment_to_detailFacialSkinDisorderFragment, bundle
             )
         }
 
@@ -221,20 +229,17 @@ class HomeFragment : Fragment() {
                 "image" to R.drawable.hyperpigmentation
             )
             findNavController().navigate(
-                R.id.action_homeFragment_to_detailFacialSkinDisorderFragment,
-                bundle
+                R.id.action_homeFragment_to_detailFacialSkinDisorderFragment, bundle
             )
         }
 
         // Navigasi untuk "Acne" card
         binding.cardAcne.card.setOnClickListener {
             val bundle = bundleOf(
-                "disorderInformation" to acneInfo,
-                "image" to R.drawable.acne
+                "disorderInformation" to acneInfo, "image" to R.drawable.acne
             )
             findNavController().navigate(
-                R.id.action_homeFragment_to_detailFacialSkinDisorderFragment,
-                bundle
+                R.id.action_homeFragment_to_detailFacialSkinDisorderFragment, bundle
             )
         }
 
@@ -260,8 +265,7 @@ class HomeFragment : Fragment() {
             tvCard.text = acneInfo.name // Menggunakan data dari disorderInformation
             ivCard.setImageDrawable(
                 ResourcesCompat.getDrawable(
-                    resources,
-                    R.drawable.acne, // Gambar dari resource
+                    resources, R.drawable.acne, // Gambar dari resource
                     null
                 )
             )
@@ -272,9 +276,7 @@ class HomeFragment : Fragment() {
             tvCard.text = hyperpigmentationInfo.name
             ivCard.setImageDrawable(
                 ResourcesCompat.getDrawable(
-                    resources,
-                    R.drawable.hyperpigmentation,
-                    null
+                    resources, R.drawable.hyperpigmentation, null
                 )
             )
         }
@@ -284,9 +286,7 @@ class HomeFragment : Fragment() {
             tvCard.text = rednessInfo.name
             ivCard.setImageDrawable(
                 ResourcesCompat.getDrawable(
-                    resources,
-                    R.drawable.kemerahan,
-                    null
+                    resources, R.drawable.kemerahan, null
                 )
             )
         }
@@ -296,9 +296,7 @@ class HomeFragment : Fragment() {
             tvCard.text = blackheadsInfo.name
             ivCard.setImageDrawable(
                 ResourcesCompat.getDrawable(
-                    resources,
-                    R.drawable.komedo,
-                    null
+                    resources, R.drawable.komedo, null
                 )
             )
         }
@@ -308,9 +306,7 @@ class HomeFragment : Fragment() {
             tvCard.text = oilyInfo.name
             ivCard.setImageDrawable(
                 ResourcesCompat.getDrawable(
-                    resources,
-                    R.drawable.oily,
-                    null
+                    resources, R.drawable.oily, null
                 )
             )
         }
@@ -320,9 +316,7 @@ class HomeFragment : Fragment() {
             tvCard.text = normalInfo.name
             ivCard.setImageDrawable(
                 ResourcesCompat.getDrawable(
-                    resources,
-                    R.drawable.normal,
-                    null
+                    resources, R.drawable.normal, null
                 )
             )
         }
@@ -332,9 +326,7 @@ class HomeFragment : Fragment() {
             tvButton.text = getString(R.string.how_to_use)
             icButton.setImageDrawable(
                 ResourcesCompat.getDrawable(
-                    resources,
-                    R.drawable.baseline_info_24,
-                    null
+                    resources, R.drawable.baseline_info_24, null
                 )
             )
         }
@@ -342,9 +334,7 @@ class HomeFragment : Fragment() {
             tvButton.text = getString(R.string.about_application)
             icButton.setImageDrawable(
                 ResourcesCompat.getDrawable(
-                    resources,
-                    R.drawable.baseline_phone_android_24,
-                    null
+                    resources, R.drawable.baseline_phone_android_24, null
                 )
             )
         }
@@ -352,6 +342,7 @@ class HomeFragment : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
+        viewModel.resetClassifyState()
         _binding = null
     }
 }

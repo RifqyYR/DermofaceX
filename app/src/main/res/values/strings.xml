@@ -69,4 +69,5 @@
     <string name="gallery">Galeri</string>
     <string name="select_image_source">Opsi pengambilan gambar</string>
     <string name="processing_image">Memproses citra</string>
+    <string name="result_probability">Jerawat: 0%</string>
 </resources>
