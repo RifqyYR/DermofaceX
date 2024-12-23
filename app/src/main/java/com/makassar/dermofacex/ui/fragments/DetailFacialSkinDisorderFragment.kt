@@ -64,7 +64,7 @@ class DetailFacialSkinDisorderFragment : Fragment() {
             when (position) {
                 0 -> tab.text = "Penyebab"
                 1 -> tab.text = "Penanganan"
-                2 -> tab.text = "Bahan Berbahaya"
+                2 -> tab.text = "Kandungan Berbahaya"
             }
         }.attach()
     }

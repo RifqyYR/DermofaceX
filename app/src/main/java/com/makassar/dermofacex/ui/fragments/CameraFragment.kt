@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.OptIn
+import androidx.annotation.VisibleForTesting
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageAnalysis
@@ -45,9 +46,12 @@ import java.util.concurrent.Executors
 
 class CameraFragment : Fragment() {
     private var _binding: FragmentCameraBinding? = null
-    private val binding get() = _binding!!
 
-    private val viewModel: MainViewModel by viewModel()
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    internal val binding get() = _binding!!
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    internal val viewModel: MainViewModel by viewModel()
     private var imageCapture: ImageCapture? = null
     private lateinit var outputDirectory: File
     private lateinit var cameraExecutor: ExecutorService
@@ -157,7 +161,8 @@ class CameraFragment : Fragment() {
         viewModel.getProbabilityResult(body)
     }
 
-    private fun readFileFromUri(uri: Uri): ByteArray? {
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    internal fun readFileFromUri(uri: Uri): ByteArray? {
         val contentResolver = requireContext().contentResolver
         return try {
             contentResolver.openInputStream(uri)?.use { inputStream ->
@@ -169,7 +174,8 @@ class CameraFragment : Fragment() {
         }
     }
 
-    private fun getClassificationResult() {
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    internal fun getClassificationResult() {
         lifecycleScope.launch {
             viewModel.probability.collectLatest { result ->
                 when (result) {
@@ -225,11 +231,13 @@ class CameraFragment : Fragment() {
         }
     }
 
-    private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    internal fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
         ContextCompat.checkSelfPermission(requireContext(), it) == PackageManager.PERMISSION_GRANTED
     }
 
-    private fun getOutputDirectory(): File {
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    internal fun getOutputDirectory(): File {
         val mediaDir = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)
         return mediaDir?.let {
             File(it, resources.getString(R.string.app_name)).apply { mkdirs() }

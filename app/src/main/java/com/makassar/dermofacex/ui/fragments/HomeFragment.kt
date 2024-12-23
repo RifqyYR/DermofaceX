@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
@@ -33,7 +34,9 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
-    private val binding get() = _binding!!
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    internal val binding get() = _binding!!
 
     private val viewModel: MainViewModel by viewModel()
     private lateinit var galleryLauncher: ActivityResultLauncher<Intent>
@@ -71,7 +74,8 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun showImageSourceDialog() {
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    internal fun showImageSourceDialog() {
         val options = arrayOf(getString(R.string.camera), getString(R.string.gallery))
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle(getString(R.string.select_image_source))
@@ -163,7 +167,8 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun pickImageFromGallery() {
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    internal fun pickImageFromGallery() {
         val intent = Intent(Intent.ACTION_PICK)
         intent.type = "image/*"
         galleryLauncher.launch(intent)

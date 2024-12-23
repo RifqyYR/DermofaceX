@@ -25,7 +25,7 @@ android {
             buildConfigField(
                 "String",
                 "API_URL",
-                "\"https://1ecb-182-1-184-135.ngrok-free.app/\""
+                "\"https://01d1-103-195-142-125.ngrok-free.app/\""
             )
             buildConfigField("boolean", "CATALYST_DEBUG", "true")
             buildConfigField("boolean", "ALLOW_INVALID_CERTIFICATE", "true")
@@ -114,4 +114,31 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    androidTestImplementation(libs.androidx.fragment.testing)
+    debugImplementation(libs.androidx.fragment.testing.manifest)
+
+    // Mockito for mocking
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.mockito.inline)
+
+    androidTestImplementation(libs.androidx.espresso.core.v340)
+    androidTestImplementation(libs.mockito.android)
+    androidTestImplementation(libs.androidx.navigation.testing)
+
+    // AndroidX Test libraries
+    testImplementation(libs.androidx.junit.v113)
+    testImplementation(libs.androidx.core)
+
+    // Coroutines test for testing suspend functions
+    testImplementation(libs.kotlinx.coroutines.test)
+
+    testImplementation(libs.koin.test)
+    testImplementation(libs.koin.test.junit4)
+
+    // For unit tests (in src/test)
+    testImplementation(libs.mockk)
+
+    // For instrumentation tests (in src/androidTest)
+    androidTestImplementation(libs.mockk.android)
 }

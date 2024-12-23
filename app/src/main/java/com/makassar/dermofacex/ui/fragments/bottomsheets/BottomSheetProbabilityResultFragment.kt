@@ -47,9 +47,6 @@ class BottomSheetProbabilityResultFragment : BottomSheetDialogFragment() {
                 0 -> tab.text = "XGB"
                 1 -> tab.text = "CatBoost"
                 2 -> tab.text = "LightGBM"
-                3 -> tab.text = "CNN"
-                4 -> tab.text = "CNN Feat Ex"
-                5 -> tab.text = "YoloV8"
             }
         }.attach()
     }
