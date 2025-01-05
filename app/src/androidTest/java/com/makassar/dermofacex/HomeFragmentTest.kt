@@ -27,7 +27,6 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 @MediumTest
 class HomeFragmentTest {
-
     private lateinit var mockNavController: NavController
     private val oilyInfo = DisorderInformation(
         "Berminyak",
@@ -147,17 +146,13 @@ class HomeFragmentTest {
     fun imageSourceDialog_selectCamera_navigatesToCameraFragment() {
         val scenario =
             launchFragmentInContainer<HomeFragment>(themeResId = R.style.Theme_DermofaceX)
-
         scenario.onFragment { fragment ->
             Navigation.setViewNavController(fragment.requireView(), mockNavController)
         }
-
         // Open the dialog by clicking the cardCheckYourFaceSkin button
         onView(withId(R.id.card_check_your_face_skin)).perform(click())
-
         // Select the "Camera" option in the dialog
         onView(withText(R.string.camera)).perform(click())
-
         // Verify navigation to CameraFragment
         verify {
             mockNavController.navigate(R.id.action_homeFragment_to_cameraFragment)
@@ -168,7 +163,6 @@ class HomeFragmentTest {
     fun imageSourceDialog_selectGallery_triggersGallerySelection() {
         // Create a spy before launching the fragment
         val spiedFragment = spyk<HomeFragment>(recordPrivateCalls = true)
-
         // Create custom fragment factory
         val factory = object : FragmentFactory() {
             override fun instantiate(classLoader: ClassLoader, className: String): Fragment {
@@ -178,21 +172,17 @@ class HomeFragmentTest {
                 }
             }
         }
-
         // Launch with our custom factory
         val scenario = launchFragmentInContainer<HomeFragment>(
             themeResId = R.style.Theme_DermofaceX,
             factory = factory
         )
-
         // Open the dialog by clicking the cardCheckYourFaceSkin button
         onView(withId(R.id.card_check_your_face_skin))
             .perform(scrollTo(), click())
-
         // Select the "Gallery" option in the dialog
         onView(withText(R.string.gallery))
             .perform(click())
-
         // Verify the call on our spy
         verify { spiedFragment.pickImageFromGallery() }
     }

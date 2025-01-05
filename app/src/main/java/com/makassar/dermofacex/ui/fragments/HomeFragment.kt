@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -41,7 +42,7 @@ class HomeFragment : Fragment() {
     private val viewModel: MainViewModel by viewModel()
     private lateinit var galleryLauncher: ActivityResultLauncher<Intent>
 
-    var isResultShown = false // Flag untuk mengontrol satu kali tampil
+    var isResultShown = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -110,6 +111,7 @@ class HomeFragment : Fragment() {
         if (viewModel.classify.value is Resource.Success) {
             viewModel.resetClassifyState() // Reset state jika masih ada hasil sukses sebelumnya
         }
+
         val imageFile = getFileFromUri(requireContext(), imageUri)
 
         val requestBody = imageFile.asRequestBody("image/*".toMediaTypeOrNull())

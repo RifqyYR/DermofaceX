@@ -70,6 +70,10 @@ class CameraFragment : Fragment() {
         loadKoinModules(viewModelModule)
         cameraExecutor = Executors.newSingleThreadExecutor()
 
+        binding.viewFinder.post {
+            startCamera()
+        }
+
         if (allPermissionsGranted()) {
             startCamera()
         } else {

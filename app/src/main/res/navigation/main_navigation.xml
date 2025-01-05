@@ -35,9 +35,6 @@
             android:id="@+id/action_homeFragment_to_scanFaceFragment"
             app:destination="@id/scanFaceFragment" />
         <action
-            android:id="@+id/action_homeFragment_to_videoScanFragment"
-            app:destination="@id/videoScanFragment" />
-        <action
             android:id="@+id/action_homeFragment_to_cameraFragment"
             app:destination="@id/cameraFragment" />
     </fragment>
@@ -77,9 +74,4 @@
         android:name="com.makassar.dermofacex.ui.fragments.CameraFragment"
         android:label="fragment_camera"
         tools:layout="@layout/fragment_camera" />
-    <fragment
-        android:id="@+id/videoScanFragment"
-        android:name="com.makassar.dermofacex.ui.fragments.VideoScanFragment"
-        android:label="fragment_video_scan"
-        tools:layout="@layout/fragment_video_scan" />
 </navigation>

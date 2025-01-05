@@ -27,7 +27,6 @@ import java.io.ByteArrayInputStream
 import java.io.File
 
 class CameraFragmentTest {
-
     private lateinit var fragment: CameraFragment
     private lateinit var mockContext: Context
     private lateinit var mockContentResolver: ContentResolver

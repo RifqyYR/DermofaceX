@@ -25,7 +25,7 @@ android {
             buildConfigField(
                 "String",
                 "API_URL",
-                "\"https://01d1-103-195-142-125.ngrok-free.app/\""
+                "\"http://147.93.30.29:8000/\""
             )
             buildConfigField("boolean", "CATALYST_DEBUG", "true")
             buildConfigField("boolean", "ALLOW_INVALID_CERTIFICATE", "true")
